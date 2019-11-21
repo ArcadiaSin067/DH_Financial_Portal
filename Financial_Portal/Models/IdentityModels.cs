@@ -11,16 +11,9 @@ namespace Financial_Portal.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        [Display(Name = "First Name")]
-        [StringLength(35, MinimumLength = 2, ErrorMessage = "Must have minimum length of 2 characters and maximum length of 35.")]
         public string FirstName { get; set; }
-
-        [Display(Name = "Last Name")]
-        [StringLength(35, MinimumLength = 2, ErrorMessage = "Must have minimum length of 2 characters and maximum length of 35.")]
         public string LastName { get; set; }
-
         public string AvatarPath { get; set; }
-
         [NotMapped]
         public string FullName
         {
@@ -29,6 +22,7 @@ namespace Financial_Portal.Models
                 return $"{FirstName} {LastName}";
             }
         }
+
 
         public int HouseholdId { get; set; }
 
@@ -47,7 +41,6 @@ namespace Financial_Portal.Models
             Notifications = new HashSet<Notification>();
             Transactions = new HashSet<Transaction>();
         }
-
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
