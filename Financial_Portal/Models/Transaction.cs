@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Financial_Portal.Models
 {
-    public class Transactions
+    public class Transaction
     {
         public int Id { get; set; }
         public float Amount { get; set; }
@@ -19,7 +19,7 @@ namespace Financial_Portal.Models
         public string OwnerId { get; set; }
 
         public virtual ApplicationUser Owner { get; set; }
-        public virtual BucketItems BucketItem { get; set; }
-        public virtual Accounts Account { get; set; }
+        public virtual BucketItem BucketItem { get; set; }
+        public virtual BankAccount Account { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Financial_Portal.Models
 {
-    public class BucketItems
+    public class BucketItem
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -16,13 +16,13 @@ namespace Financial_Portal.Models
         public int BucketId { get; set; }
 
         //Nav section
-        public virtual Buckets Bucket { get; set; }
-        public virtual ICollection<Transactions> Transactions { get; set; }
+        public virtual Bucket Bucket { get; set; }
+        public virtual ICollection<Transaction> Transactions { get; set; }
 
         //Constructor
-        public BucketItems()
+        public BucketItem()
         {
-            Transactions = new HashSet<Transactions>();
+            Transactions = new HashSet<Transaction>();
         }
     }
 }

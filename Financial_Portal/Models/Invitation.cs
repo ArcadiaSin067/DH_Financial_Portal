@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Financial_Portal.Models
 {
-    public class Invitations
+    public class Invitation
     {
         public int Id { get; set; }
         public int TTL { get; set; }
@@ -17,6 +17,6 @@ namespace Financial_Portal.Models
         public int HouseholdId { get; set; }
 
         //Nav section
-        public virtual Households Household { get; set; }
+        public virtual Household Household { get; set; }
     }
 }

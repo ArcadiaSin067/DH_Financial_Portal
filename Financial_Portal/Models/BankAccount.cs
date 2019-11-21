@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Financial_Portal.Models
 {
-    public class Accounts
+    public class BankAccount
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -20,12 +20,12 @@ namespace Financial_Portal.Models
 
         //Nav section
         public virtual ApplicationUser Owner { get; set; }
-        public virtual Households Household { get; set; }
-        public virtual ICollection<Transactions> Transactions { get; set; }
+        public virtual Household Household { get; set; }
+        public virtual ICollection<Transaction> Transactions { get; set; }
         //Constructor
-        public Accounts()
+        public BankAccount()
         {
-            Transactions = new HashSet<Transactions>();
+            Transactions = new HashSet<Transaction>();
         }
     }
 }

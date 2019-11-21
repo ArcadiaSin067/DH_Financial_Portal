@@ -33,19 +33,19 @@ namespace Financial_Portal.Models
         public int HouseholdId { get; set; }
 
         //Nav section
-        public virtual Households Household { get; set; }
-        public virtual ICollection<Accounts> Accounts { get; set; }
-        public virtual ICollection<Buckets> Buckets { get; set; }
-        public virtual ICollection<Notifications> Notifications { get; set; }
-        public virtual ICollection<Transactions> Transactions { get; set; }
+        public virtual Household Household { get; set; }
+        public virtual ICollection<BankAccount> Accounts { get; set; }
+        public virtual ICollection<Bucket> Buckets { get; set; }
+        public virtual ICollection<Notification> Notifications { get; set; }
+        public virtual ICollection<Transaction> Transactions { get; set; }
 
         //constructor
         public ApplicationUser()
         {
-            Accounts = new HashSet<Accounts>();
-            Buckets = new HashSet<Buckets>();
-            Notifications = new HashSet<Notifications>();
-            Transactions = new HashSet<Transactions>();
+            Accounts = new HashSet<BankAccount>();
+            Buckets = new HashSet<Bucket>();
+            Notifications = new HashSet<Notification>();
+            Transactions = new HashSet<Transaction>();
         }
 
 
@@ -70,12 +70,12 @@ namespace Financial_Portal.Models
             return new ApplicationDbContext();
         }
 
-        public DbSet<Accounts> Accounts { get; set; }
-        public DbSet<BucketItems> BucketItems { get; set; }
-        public DbSet<Buckets> Buckets { get; set; }
-        public DbSet<Households> Households { get; set; }
-        public DbSet<Invitations> Invitations { get; set; }
-        public DbSet<Notifications> Notifications { get; set; }
-        public DbSet<Transactions> Transactions { get; set; }
+        public DbSet<BankAccount> Accounts { get; set; }
+        public DbSet<BucketItem> BucketItems { get; set; }
+        public DbSet<Bucket> Buckets { get; set; }
+        public DbSet<Household> Households { get; set; }
+        public DbSet<Invitation> Invitations { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Financial_Portal.Models
 {
-    public class Notifications
+    public class Notification
     {
         public int Id { get; set; }
         public bool IsRead { get; set; }
@@ -17,7 +17,7 @@ namespace Financial_Portal.Models
         public int HouseholdId { get; set; }
 
         //Nav section
-        public virtual Households Household { get; set; }
+        public virtual Household Household { get; set; }
         public virtual ApplicationUser Recipient { get; set; }
     }
 }
