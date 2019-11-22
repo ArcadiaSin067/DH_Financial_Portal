@@ -23,8 +23,8 @@ namespace Financial_Portal.Models
             }
         }
 
-
-        public int HouseholdId { get; set; }
+        //foreign key
+        public int? HouseholdId { get; set; }
 
         //Nav section
         public virtual Household Household { get; set; }

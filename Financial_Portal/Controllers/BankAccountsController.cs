@@ -10,6 +10,8 @@ using Financial_Portal.Models;
 
 namespace Financial_Portal.Controllers
 {
+    [Authorize]
+    [RequireHttps]
     public class BankAccountsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

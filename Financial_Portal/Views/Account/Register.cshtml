@@ -1,34 +1,61 @@
-﻿@model Financial_Portal.Models.RegisterViewModel
+﻿@using Financial_Portal.Helpers
+@model Financial_Portal.Models.RegisterViewModel
 @{
     ViewBag.Title = "Register";
-}
+    Layout = "~/Views/Shared/_LoginShared.cshtml";
 
-<h2>@ViewBag.Title.</h2>
+}
 
 @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
+    @Html.Hidden("AvatarPath")
+
     <h4>Create a new account.</h4>
-    <hr />
+    <br />
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
-        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.LastName, new { @class = "col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2" })
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(m => m.Password, new { @class = "col-md-2" })
         <div class="col-md-10">
             @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2" })
         <div class="col-md-10">
             @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
         </div>
     </div>
+    <br />
+    <div class="form-group">
+        @Html.Label("Click to Select an Avatar or leave default", new { @class = "col-md-2" })
+        <div class="col-md-10">
+            <a data-toggle="modal" data-target="#AvatarModal">
+                <img id="targetImg" src="@Model.AvatarPath" style="height:50px;width:50px;padding:5px;border:1px solid grey" alt="img">
+            </a>
+        </div>
+    </div>
+
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" class="btn btn-default" value="Register" />
@@ -36,6 +63,33 @@
     </div>
 }
 
+<!-- Avatar Modal -->
+<div class="modal fade" id="AvatarModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h3 class="modal-title">Select An Avatar</h3>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body" style="padding:15px 8% 45px 8%">
+                    @foreach (var avatar in AvatarHelper.ModalAvatarList())
+                    {
+                        <img class="srcImg" data-toggle="modal" data-target="#AvatarModal"
+                             src="@avatar" style="height:75px;width:75px;padding:19.75px" />
+                    }
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(".srcImg").on("click", function () {
+            var newSrc = $(this).attr('src');
+            $('#targetImg').attr("src", newSrc);
+            $('#AvatarPath').val(newSrc);
+        });
+    </script>
 }

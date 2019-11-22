@@ -13,8 +13,11 @@ using Financial_Portal.Models;
 namespace Financial_Portal.Controllers
 {
     [Authorize]
+    [RequireHttps]
     public class AccountController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -139,7 +142,9 @@ namespace Financial_Portal.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            RegisterViewModel model = new RegisterViewModel();
+            model.AvatarPath = "/Images/default.png";
+            return View(model);
         }
 
         //
@@ -151,7 +156,9 @@ namespace Financial_Portal.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email,AvatarPath = model.AvatarPath,
+                                                 FirstName = model.FirstName, LastName = model.LastName };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
