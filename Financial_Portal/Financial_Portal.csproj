@@ -212,7 +212,10 @@
     <Content Include="Avatars\9.png" />
     <Content Include="Content\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="img\glyphicons-halflings-white.png" />
+    <Content Include="img\glyphicons-halflings.png" />
+    <Content Include="Content\main.css" />
     <Content Include="Content\theme.css" />
     <Content Include="favicon.ico" />
     <Content Include="font\glyphicons-halflings-regular.svg" />
@@ -229,6 +232,7 @@
     <Content Include="Scripts\jquery.flot.js" />
     <Content Include="Scripts\jquery.flot.pie.js" />
     <Content Include="Scripts\jquery.flot.resize.js" />
+    <Content Include="Scripts\main.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -311,6 +315,11 @@
     <Content Include="font\fontawesome-webfont3294.ttf" />
     <Content Include="font\fontawesome-webfont3294.woff" />
     <Content Include="font\fontawesome-webfontd41d.eot" />
+    <Content Include="Content\fonts\OpenSans-Regular.ttf" />
+    <Content Include="Content\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\fonts\fontawesome-webfont.eot" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\_LoginShared.cshtml" />
   </ItemGroup>

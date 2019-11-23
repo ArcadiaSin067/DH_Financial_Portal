@@ -7,72 +7,73 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Big_Bank</title>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big_Bank</title>
 
-        <!-- Style sheets -->
-        <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-        <link href="~/Content/bootstrap-responsive.min.css" rel="stylesheet" />
-        <link href="~/Content/theme.css" rel="stylesheet" />
-        <link href="~/Content/font-awesome.css" rel="stylesheet" />
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
-        <link type="text/css" href='//fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600'
-              rel='stylesheet'>
-    </head>
-    <body>
-        <div class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
-                        <i class="icon-reorder shaded"></i>
-                    </a>
-                    <a class="brand">Big_Bank</a>
-                    <div class="nav-collapse collapse navbar-inverse-collapse">
-                        <ul class="nav pull-right">
-                            @if (ViewBag.Title != "Login")
-                            {
-                                <li>
-                                    @Html.ActionLink("Login", "Login")
-                                </li>
-                            }
-                            @if (ViewBag.Title != "Register")
-                            {
-                                <li>
-                                    @Html.ActionLink("Register", "Register")
-                                </li>
-                            }
-                            @if (ViewBag.Title != "Forgot your password?")
-                            {
-                                <li>
-                                    @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="wrapper" style=" min-height:350px">
-            <div class="container" style="min-height:300px; background:url('../Images/bigpig.png')no-repeat; 
-                                          background-size:230px; background-position-y:center; background-position-x:right">
-                <div class="row">
-                    @RenderBody()
-                </div>
-            </div>
-        </div><!--/.wrapper-->
-        <div class="footer">
+    <!-- Style sheets -->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-responsive.min.css" rel="stylesheet" />
+    <link href="~/Content/theme.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link type="text/css" href='//fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600'
+          rel='stylesheet'>
+    <link href="~/Content/main.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
             <div class="container">
-                <p>&copy; @DateTime.Now.Year - Big_Bank by Daniel Hebbard</p>
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+                    <i class="menu-icon icon-align-justify"></i>
+                </a>
+                <a class="brand">Big_Bank</a>
+                <div class="nav-collapse collapse navbar-inverse-collapse">
+                    <ul class="nav pull-right">
+                        @if (ViewBag.Title != "Login")
+                        {
+                            <li>
+                                @Html.ActionLink("Login", "Login")
+                            </li>
+                        }
+                        @if (ViewBag.Title != "Register")
+                        {
+                            <li>
+                                @Html.ActionLink("Register", "Register")
+                            </li>
+                        }
+                        @if (ViewBag.Title != "Forgot your password?")
+                        {
+                            <li>
+                                @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                            </li>
+                        }
+                    </ul>
+                </div>
             </div>
         </div>
+    </div>
+    <div class="wrapper" style=" min-height:350px">
+        <div class="container" style="min-height:350px;background:url('../Images/bigpig.png')no-repeat;
+                                background-size:230px; background-position-y:center; background-position-x:right">
+            <div class="row">
+                @RenderBody()
+            </div>
+        </div>
+    </div><!--/.wrapper-->
+    <div class="footer">
+        <div class="container">
+            <p><strong>&copy; @DateTime.Now.Year - Big_Bank</strong> by Daniel Hebbard</p>
+        </div>
+    </div>
 
-        <!-- Scripts section -->
-        <script src="~/Scripts/jquery-1.9.1.min.js"></script>
-        <script src="~/Scripts/jquery-ui-1.10.1.custom.min.js"></script>
-        <script src="~/Scripts/bootstrap.min.js"></script>
-        @RenderSection("scripts", required: false)
+    <!-- Scripts section -->
+    <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.10.1.custom.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/main.js"></script>
+    @RenderSection("scripts", required: false)
 
-    </body>
+</body>
 </html>
