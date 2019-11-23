@@ -1,16 +1,38 @@
 ﻿
-<style>
-    .controls {
-        margin-left: 0px !important;
-    }
-</style>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Big_Bank</title>
+
+    <style>
+        .controls {
+            margin-left: 0px !important;
+        }
+        .btn-navbar {
+            background-image: linear-gradient(to bottom, #1d1d2d, #2f2f3f) !important;
+            color:lightgray !important;
+        }
+        .btn-navbar:hover {
+            background-image: linear-gradient(to bottom, #1d2d4d, #2f3f5f) !important;
+            color:white !important;
+        }
+        .btn:hover {
+            background-position: 0 0 !important;
+        }
+        ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+          color: lightgray !important;
+        }
+        ::-moz-placeholder { /* Firefox 19+ */
+          color: lightgray !important;
+        }
+        :-ms-input-placeholder { /* IE 10+ */
+          color: lightgray !important;
+        }
+        :-moz-placeholder { /* Firefox 18- */
+          color: lightgray !important;
+}    </style>
 
     <!-- Style sheets -->
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
@@ -25,7 +47,7 @@
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse" style="margin-top:18px">
                     <i class="menu-icon icon-align-justify"></i>
                 </a>
                 <a class="brand">Big_Bank</a>
@@ -54,10 +76,10 @@
             </div>
         </div>
     </div>
-    <div class="wrapper" style=" min-height:350px">
+    <div class="wrapper" style="min-height:350px">
         <div class="container" style="min-height:350px;background:url('../Images/bigpig.png')no-repeat;
                                 background-size:230px; background-position-y:center; background-position-x:right">
-            <div class="row">
+            <div class="row" style="z-index:1!important">
                 @RenderBody()
             </div>
         </div>

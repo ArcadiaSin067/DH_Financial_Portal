@@ -16,6 +16,7 @@
         <div class="modal-body">
             <div class="control-group">
                 <div class="controls row-fluid wrap-input100 validate-input" data-validate="Valid email is required">
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                     <input class="span12 input100" type="text" name="email" id="Email" placeholder="Email">
                 </div>
             </div>
@@ -39,17 +40,17 @@
                     <input class="span12 input100" type="password" name="confirmpassword" id="ConfirmPassword" placeholder="Confirm Password">
                 </div>
             </div>
-            <div class="control-group">
+            <div class="control-group" style="max-height:65px">
                 <a data-toggle="modal" data-target="#AvatarModal">
-                    <img id="targetImg" src="@Model.AvatarPath" style="height:50px;width:50px;padding:5px;border:1px solid grey" alt="img">
-                    @Html.Label("Click to Select an Avatar or leave default", new { @class = "col-md-2 pull-right", style = "padding:15px 30px 0 0" })
+                    <img class="span1" id="targetImg" src="@Model.AvatarPath" style="height:50px;width:50px;padding:5px;border:1px solid grey;margin:0" alt="img">
+                    @Html.Label("Click to change Avatar or leave default", new{ @class = "span2", style = "padding-left:10px; margin:0; width:72%; font-size:12px"})
                 </a>
             </div>
         </div>
         <div class="module-foot">
             <div class="control-group">
                 <div class="controls clearfix">
-                    <button type="submit" class="btn btn-primary pull-right">Register</button>
+                    <button type="submit" class="btn btn-navbar pull-right">Register</button>
                 </div>
             </div>
         </div>
