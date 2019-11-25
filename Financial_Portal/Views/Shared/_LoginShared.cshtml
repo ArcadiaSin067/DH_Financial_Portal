@@ -53,23 +53,32 @@
                 <a class="brand">Big_Bank</a>
                 <div class="nav-collapse collapse navbar-inverse-collapse">
                     <ul class="nav pull-right">
-                        @if (ViewBag.Title != "Login")
+                        @if (ViewBag.Title != "Login" && ViewBag.Title != "Register" && ViewBag.Title != "Forgot your password?")
                         {
                             <li>
-                                @Html.ActionLink("Login", "Login")
+                                <a>The Wonder Piggy money management program</a>
                             </li>
                         }
-                        @if (ViewBag.Title != "Register")
+                        else
                         {
-                            <li>
-                                @Html.ActionLink("Register", "Register")
-                            </li>
-                        }
-                        @if (ViewBag.Title != "Forgot your password?")
-                        {
-                            <li>
-                                @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                            </li>
+                            if (ViewBag.Title != "Login")
+                            {
+                                <li>
+                                    @Html.ActionLink("Login", "Login")
+                                </li>
+                            }
+                            if (ViewBag.Title != "Register")
+                            {
+                                <li>
+                                    @Html.ActionLink("Register", "Register")
+                                </li>
+                            }
+                            if (ViewBag.Title != "Forgot your password?")
+                            {
+                                <li>
+                                    @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                                </li>
+                            }
                         }
                     </ul>
                 </div>

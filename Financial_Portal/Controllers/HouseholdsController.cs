@@ -6,7 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Financial_Portal.Helpers;
 using Financial_Portal.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Financial_Portal.Controllers
 {
@@ -15,6 +17,7 @@ namespace Financial_Portal.Controllers
     public class HouseholdsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private RoleHelper roleHelper = new RoleHelper();
 
         // GET: Households
         public ActionResult Index()
@@ -44,19 +47,28 @@ namespace Financial_Portal.Controllers
         }
 
         // POST: Households/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Created")] Household households)
+        public ActionResult Create([Bind(Include = "Id,Name")] Household households)
         {
             if (ModelState.IsValid)
             {
+                var userId = User.Identity.GetUserId();
+                var userRole = roleHelper.ListUserRoles(userId).FirstOrDefault();
+                if (userRole != null)
+                {
+                    roleHelper.RemoveUserFromRole(userId, userRole);
+                }
+                if (string.IsNullOrEmpty(userRole))
+                {
+                    roleHelper.AddUserToRole(userId, "Head_Of_House");
+                }
+                households.Created = DateTime.Now;
                 db.Households.Add(households);
+                db.Users.Find(userId).HouseholdId = households.Id;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
             return View(households);
         }
 

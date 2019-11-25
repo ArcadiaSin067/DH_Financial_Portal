@@ -4,7 +4,11 @@
     ViewBag.Title = "Register";
     Layout = "~/Views/Shared/_LoginShared.cshtml";
 }
-
+<style>
+    .behind{
+        z-index:-1;
+    }
+</style>
 <div class="module module-login span4 offset4">
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal validate-form", role = "form" }))
     {
@@ -66,7 +70,7 @@
                 <h3 class="modal-title">Select An Avatar</h3>
             </div>
             <!-- Modal body -->
-            <div class="modal-body" style="padding:15px 8.5% 45px 8.5%">
+            <div class="modal-body" style="padding:15px 7%">
                     @foreach (var avatar in AvatarHelper.ModalAvatarList())
                     {
                         <img class="srcImg" data-toggle="modal" data-target="#AvatarModal"
@@ -79,6 +83,14 @@
 
 @section Scripts {
     <script>
+        $(document).ready(function () {
+            $('#AvatarModal').addClass('behind')
+        });
+        $('#targetImg').on('click', function () {
+            $('#AvatarModal').removeClass('behind')
+        });
+        $('#AvatarModal').on('hidden.bs.modal').addClass('behind');
+
         $(".srcImg").on("click", function () {
             var newSrc = $(this).attr('src');
             $('#targetImg').attr("src", newSrc);

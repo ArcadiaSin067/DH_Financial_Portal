@@ -1,20 +1,28 @@
-﻿using Financial_Portal.Enums;
-using System;
+﻿using System;
+using Financial_Portal.Enums;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace Financial_Portal.Models
 {
     public class BankAccount
     {
         public int Id { get; set; }
+
+        [Display(Name = "Account Name")]
         public string Name { get; set; }
+
+        [Display(Name = "Starting Balance")]
         public float StartBal { get; set; }
+
+        [Display(Name = "Current Balance")]
         public float CurrentBal { get; set; }
         public DateTime Created { get; set; }
+
+        [Display(Name = "Account Type")]
         public AccountTypes AccountType { get; set; }
 
+        //foreign keys
         public string OwnerId { get; set; }
         public int HouseholdId { get; set; }
 

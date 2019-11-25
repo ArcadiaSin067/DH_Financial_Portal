@@ -183,11 +183,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\AvatarHelper.cs" />
+    <Compile Include="Helpers\EmailHelper.cs" />
+    <Compile Include="Helpers\RoleHelper.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BankAccount.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BucketItem.cs" />
     <Compile Include="Models\Bucket.cs" />
+    <Compile Include="Models\EmailModel.cs" />
     <Compile Include="Models\Household.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Invitation.cs" />
@@ -202,6 +205,10 @@
     <Content Include="Avatars\10.png" />
     <Content Include="Avatars\11.png" />
     <Content Include="Avatars\12.png" />
+    <Content Include="Avatars\13.png" />
+    <Content Include="Avatars\14.png" />
+    <Content Include="Avatars\9.png" />
+    <Content Include="Avatars\16.png" />
     <Content Include="Avatars\2.png" />
     <Content Include="Avatars\3.png" />
     <Content Include="Avatars\4.png" />
@@ -209,10 +216,18 @@
     <Content Include="Avatars\6.png" />
     <Content Include="Avatars\7.png" />
     <Content Include="Avatars\8.png" />
-    <Content Include="Avatars\9.png" />
+    <Content Include="Avatars\15.png" />
     <Content Include="Content\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Images\BigOil.png" />
+    <Content Include="Images\JPop.png" />
+    <Content Include="Images\Master.png" />
+    <Content Include="Images\Srsly.png" />
+    <Content Include="Images\The_Fish.png" />
+    <Content Include="Images\The_Twich.png" />
+    <Content Include="Images\Whoa.png" />
+    <Content Include="Images\Yum.png" />
     <Content Include="img\glyphicons-halflings-white.png" />
     <Content Include="img\glyphicons-halflings.png" />
     <Content Include="Content\main.css" />
@@ -229,9 +244,6 @@
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-ui-1.10.1.custom.min.js" />
     <Content Include="Scripts\jquery.dataTables.js" />
-    <Content Include="Scripts\jquery.flot.js" />
-    <Content Include="Scripts\jquery.flot.pie.js" />
-    <Content Include="Scripts\jquery.flot.resize.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -322,6 +334,8 @@
     <Content Include="Content\fonts\fontawesome-webfont.eot" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\_LoginShared.cshtml" />
+    <Content Include="Views\Account\NewlyRegistered.cshtml" />
+    <Content Include="Views\Manage\EditProfile.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

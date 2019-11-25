@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Password Reset Confirmed";
+    ViewBag.Title = "Newly Registered";
     Layout = "~/Views/Shared/_LoginShared.cshtml";
 }
 
@@ -11,9 +11,8 @@
         <div class="control-group">
             <div class="row-fluid">
                 <span style="width:85%">
-                    Your password has been reset. Please click
-                    <u>@Html.ActionLink("here", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</u>
-                    to login.
+                    Thanks for Registering @ViewBag.UserName! Please keep an eye on your Email for an 
+                    account confirmation message from "Big_Bank Admin"!
                 </span>
             </div>
         </div>
@@ -21,7 +20,8 @@
     <div class="module-foot">
         <div class="control-group">
             <div class="controls clearfix">
-                <img src="~/Images/bigpig.png" style="height:25px; width:25px; margin-left:0" class="pull-right span1" />
+                <span class="span3" style="font-size:12px; width:86%; margin:4px 0 0 0">@ViewBag.UserEmail</span>
+                <img src="@ViewBag.AvatarPath" style="height:25px; width:25px; margin-left:0" class="pull-right span1" />
             </div>
         </div>
     </div>

@@ -1,0 +1,122 @@
+﻿@using Financial_Portal.Helpers
+@model Financial_Portal.Models.EditProfileViewModel
+@{
+    ViewBag.Title = "Edit Profile";
+}
+
+<style>
+    .behind {
+        z-index: -1;
+    }
+    .avatarPic {
+        height:50px;
+        max-height:50px;
+        width:50px;
+        max-width:50px;
+        padding:5px;
+        border:1px solid #c2c2c2;
+        border-radius:3px;
+    }
+</style>
+
+
+<div class="module">
+    <div class="module-head">
+        <h3>@ViewBag.Title</h3>
+    </div>
+    <div class="module-body">
+        @*<div class="alert">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>Warning!</strong> Something fishy here!
+        </div>
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>Oh snap!</strong> Whats wrong with you?
+        </div>
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>Well done!</strong> Now you are listening me :)
+        </div>*@
+        <br />
+        @using (Html.BeginForm("EditProfile", "Manage", FormMethod.Post, new { @class = "form-horizontal row-fluid" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("AvatarPath")
+            <div class="control-group">
+                <label class="control-label" for="Email">Email</label>
+                <div class="controls">
+                    @Html.TextBoxFor(m => m.Email, new { @class = "span8", placeholder = "Email" })
+                    @*<span class="help-inline">Minimum 5 Characters</span>*@
+                </div>
+            </div>
+            <div class="control-group">
+                <br />
+                <label class="control-label" for="FirstName">First Name</label>
+                <div class="controls">
+                    @Html.TextBoxFor(m => m.FirstName, new { @class = "span8", placeholder = "First Name" })
+                </div>
+            </div>
+            <div class="control-group">
+                <br />
+                <label class="control-label" for="LastName">Last Name</label>
+                <div class="controls">
+                    @Html.TextBoxFor(m => m.LastName, new { @class = "span8", placeholder = "Last Name" })
+                </div>
+            </div>
+            <div class="control-group">
+                <br />
+                <label class="control-label" for="avBtn" style="margin-top:9px">Click to change Avatar</label>
+                <a data-toggle="modal" data-target="#AvatarModal2" id="avBtn">
+                    <img class="span8 avatarPic" id="targetImg2" src="@Model.AvatarPath" style="margin-left:20px" alt="img" />
+                </a>
+            </div>
+            <div class="control-group">
+                <br />
+                <div class="controls">
+                    <button type="submit" class="btn btn-primary">Submit Changes</button>
+                </div>
+            </div>
+            <br />
+        }
+    </div>
+</div>
+
+<!-- Avatar Modal -->
+<div class="modal fade" id="AvatarModal2">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h3 class="modal-title">Select An Avatar</h3>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body" style="padding:15px 1.14%">
+                @foreach (var avatar in AvatarHelper.ModalAvatarList())
+                {
+                    <img class="srcImg" data-toggle="modal" data-target="#AvatarModal2"
+                         src="@avatar" style="height:100px;width:100px;padding:15px" />
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#AvatarModal2').addClass('behind')
+        });
+
+        $('#targetImg2').on('click', function () {
+            $('#AvatarModal2').removeClass('behind')
+        });
+
+        $('#AvatarModal2').on('hidden.bs.modal').addClass('behind');
+
+        $(".srcImg").on("click", function () {
+            var newSrc = $(this).attr('src');
+            $('#targetImg2').attr("src", newSrc);
+            $('#AvatarPath').val(newSrc);
+        });
+    </script>
+}

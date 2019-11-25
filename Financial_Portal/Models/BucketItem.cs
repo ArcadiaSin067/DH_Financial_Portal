@@ -1,18 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace Financial_Portal.Models
 {
     public class BucketItem
     {
         public int Id { get; set; }
+
+        [Display(Name = "Bucket Item")]
         public string Name { get; set; }
         public DateTime Created { get; set; }
+
+        [Display(Name = "Target Amount")]
         public float TargetAmount { get; set; }
+
+        [Display(Name = "Current Amount")]
         public float CurrentAmount { get; set; }
 
+        //foreign keys
         public int BucketId { get; set; }
 
         //Nav section

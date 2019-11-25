@@ -1,14 +1,12 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Web;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
+using System.Threading.Tasks;
+using Financial_Portal.Models;
+using Microsoft.Owin.Security;
+using Financial_Portal.Helpers;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using Financial_Portal.Models;
 
 namespace Financial_Portal.Controllers
 {
@@ -156,27 +154,36 @@ namespace Financial_Portal.Controllers
         {
             if (ModelState.IsValid)
             {
-                
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email,AvatarPath = model.AvatarPath,
-                                                 FirstName = model.FirstName, LastName = model.LastName };
+                var user = new ApplicationUser {
+                    Email = model.Email,
+                    UserName = model.Email,
+                    LastName = model.LastName,
+                    FirstName = model.FirstName,
+                    AvatarPath = model.AvatarPath};
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                    return RedirectToAction("Index", "Home");
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code }, protocol: Request.Url.Scheme);
+                    await EmailHelper.ComposeEmailAsync(model, callbackUrl);
+                    return RedirectToAction("NewlyRegistered");
                 }
                 AddErrors(result);
             }
-
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        //
+        // GET: /Account/NewlyRegistered
+        public ActionResult NewlyRegistered()
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            ViewBag.UserEmail = user.Email;
+            ViewBag.UserName = user.FullName;
+            ViewBag.AvatarPath = user.AvatarPath;
+            return View();
         }
 
         //
@@ -189,6 +196,10 @@ namespace Financial_Portal.Controllers
                 return View("Error");
             }
             var result = await UserManager.ConfirmEmailAsync(userId, code);
+            var user = db.Users.Find(User.Identity.GetUserId());
+            ViewBag.UserEmail = user.Email;
+            ViewBag.UserName = user.FullName;
+            ViewBag.AvatarPath = user.AvatarPath;
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
@@ -210,20 +221,16 @@ namespace Financial_Portal.Controllers
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                if (user == null || !await UserManager.IsEmailConfirmedAsync(user.Id))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
                     return View("ForgotPasswordConfirmation");
                 }
-
-                // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                await EmailHelper.ComposeEmailAsync(model, callbackUrl);
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
-
             // If we got this far, something failed, redisplay form
             return View(model);
         }

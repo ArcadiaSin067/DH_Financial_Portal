@@ -54,6 +54,48 @@ namespace Financial_Portal.Controllers
         }
 
         //
+        // Get: /Manage/EditProfile
+        public ActionResult EditProfile()
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            var model = new EditProfileViewModel()
+            {
+                AvatarPath = user.AvatarPath,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName
+            };
+            return View(model);
+        }
+
+        //
+        // POST: /Manage/EditProfile
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditProfile(EditProfileViewModel epVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = db.Users.Find(User.Identity.GetUserId());
+                user.AvatarPath = epVM.AvatarPath;
+                user.Email = epVM.Email;
+                user.FirstName = epVM.FirstName;
+                user.LastName = epVM.LastName;
+                db.SaveChanges();
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                if (epVM.AvatarPath == null) { epVM.AvatarPath = "/Images/default.png"; }
+                if (epVM.Email == null) { TempData["Message1"] = "A valid email is required" ;}
+                if (epVM.FirstName == null) { TempData["Message2"] = "First name is required"; }
+                if (epVM.LastName == null) { TempData["Message3"] = "Last name is required"; }
+
+                return View(epVM);
+            }
+        }
+
+        //
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
@@ -336,7 +378,7 @@ namespace Financial_Portal.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -387,6 +429,6 @@ namespace Financial_Portal.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }

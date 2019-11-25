@@ -1,9 +1,30 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
 
 namespace Financial_Portal.Models
 {
+    public class EditProfileViewModel
+    {
+        [Required]
+        [StringLength(35, ErrorMessage = "{0} must be between {2} and {1} characters long.", MinimumLength = 2)]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [StringLength(35, ErrorMessage = "{0} must be between {2} and {1} characters long.", MinimumLength = 2)]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "Avatar")]
+        public string AvatarPath { get; set; }
+    }
+
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
@@ -91,6 +112,7 @@ namespace Financial_Portal.Models
         [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
+        [Required]
         [Display(Name ="Avatar")]
         public string AvatarPath { get; set; }
     }
