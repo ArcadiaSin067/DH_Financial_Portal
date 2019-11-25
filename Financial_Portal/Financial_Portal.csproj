@@ -179,6 +179,7 @@
     <Compile Include="Controllers\TransactionsController.cs" />
     <Compile Include="Enums\AccountTypes.cs" />
     <Compile Include="Enums\TransactionType.cs" />
+    <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

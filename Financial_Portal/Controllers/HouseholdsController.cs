@@ -4,8 +4,10 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Financial_Portal.Extensions;
 using Financial_Portal.Helpers;
 using Financial_Portal.Models;
 using Microsoft.AspNet.Identity;
@@ -49,7 +51,7 @@ namespace Financial_Portal.Controllers
         // POST: Households/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] Household households)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name")] Household households)
         {
             if (ModelState.IsValid)
             {
@@ -67,6 +69,7 @@ namespace Financial_Portal.Controllers
                 db.Households.Add(households);
                 db.Users.Find(userId).HouseholdId = households.Id;
                 db.SaveChanges();
+                await ControllerContext.HttpContext.RefreshAuthentication(db.Users.Find(userId));
                 return RedirectToAction("Index");
             }
             return View(households);
