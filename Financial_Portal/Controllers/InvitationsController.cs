@@ -4,8 +4,10 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Financial_Portal.Extensions;
 using Financial_Portal.Models;
 
 namespace Financial_Portal.Controllers
@@ -39,23 +41,27 @@ namespace Financial_Portal.Controllers
         }
 
         // GET: Invitations/Create
-        public ActionResult Create()
+        public ActionResult Create(int id)
         {
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name");
+            ViewBag.TTL = 7;
+            ViewBag.HouseholdId = id;
             return View();
         }
 
         // POST: Invitations/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,TTL,Code,IsValid,Created,RecipientEmail,HouseholdId")] Invitation invitations)
+        public async Task<ActionResult> Create([Bind(Include = "TTL,RecipientEmail,HouseholdId")] Invitation invitations)
         {
             if (ModelState.IsValid)
             {
+                invitations.Created = DateTime.Now;
+                invitations.Code = Guid.NewGuid();
+                invitations.IsValid = true;
                 db.Invitations.Add(invitations);
                 db.SaveChanges();
+                await invitations.EmailInvitation();
+
                 return RedirectToAction("Index");
             }
 

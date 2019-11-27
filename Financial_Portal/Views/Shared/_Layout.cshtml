@@ -131,6 +131,8 @@
                                         {
                                             var headNum = $"/Households/Edit/{user.HouseholdId}";
                                             <li><a href=@headNum><i class="icon-edit dropIcon"></i>Edit </a></li>
+                                            var invNum = $"/Invitations/Create/{user.HouseholdId}";
+                                            <li><a href=@invNum><i class="icon-envelope dropIcon"></i>Invite </a></li>
                                         }
                                     }
                                     <li><a href="/Households/Index"><i class="icon-list-alt dropIcon"></i>Index </a></li>
