@@ -7,6 +7,8 @@ using Microsoft.Owin.Security;
 using Financial_Portal.Helpers;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using System;
+using Financial_Portal.Extensions;
 
 namespace Financial_Portal.Controllers
 {
@@ -15,6 +17,8 @@ namespace Financial_Portal.Controllers
     public class AccountController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private RoleHelper roleHelp = new RoleHelper();
+        private InvitationHelper inviteHelp = new InvitationHelper();
 
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -138,9 +142,26 @@ namespace Financial_Portal.Controllers
         //
         // GET: /Account/Register
         [AllowAnonymous]
-        public ActionResult Register()
+        public ActionResult Register(string recipientEmail, Guid? code, int? houseId, int? Id)
         {
-            RegisterViewModel model = new RegisterViewModel();
+            AcceptInvitationViewModel model = new AcceptInvitationViewModel();
+            var invitation = db.Invitations.FirstOrDefault(i => i.RecipientEmail == recipientEmail && i.Code == code);
+            if (invitation != null)
+            {
+                var expirationDate = invitation.Created.AddDays(invitation.TTL);
+                if (invitation.IsValid && DateTime.Now < expirationDate)
+                {
+                    model.Code = (Guid)code;
+                    model.HouseholdId = (int)houseId;
+                    model.Email = recipientEmail;
+                    model.Id = (int)Id;
+                    ViewBag.HasCode = true;
+                }
+            }
+            else
+            {
+                ViewBag.HasCode = false;
+            }
             model.AvatarPath = "/Images/default.png";
             return View(model);
         }
@@ -150,7 +171,7 @@ namespace Financial_Portal.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(AcceptInvitationViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -159,10 +180,13 @@ namespace Financial_Portal.Controllers
                     UserName = model.Email,
                     LastName = model.LastName,
                     FirstName = model.FirstName,
-                    AvatarPath = model.AvatarPath};
+                    AvatarPath = model.AvatarPath
+                };
+                if (model.HouseholdId != 0) { user.HouseholdId = model.HouseholdId; }
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    if (model.HouseholdId != 0) { roleHelp.AddUserToRole(user.Id, "Member"); inviteHelp.MarkAsInvalid(model.Id); }
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code }, protocol: Request.Url.Scheme);

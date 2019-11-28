@@ -18,6 +18,12 @@ namespace Financial_Portal.Controllers
             return View();
         }
 
+        // GET: Home/Dashboard
+        public ActionResult Dashboard()
+        {
+            return View();
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

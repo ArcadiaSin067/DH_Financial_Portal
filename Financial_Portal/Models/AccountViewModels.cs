@@ -1,8 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Financial_Portal.Models
 {
+    public class JoinInvitationViewModel
+    {
+        public int Id { get; set; }
+        public Guid Code { get; set; }
+        public int HouseholdId { get; set; }
+        public string Email { get; set; }
+    }
+
+    public class AcceptInvitationViewModel: RegisterViewModel
+    {
+        public int Id { get; set; }
+        public Guid Code { get; set; }
+        public int HouseholdId { get; set; }
+    }
+
     public class EditProfileViewModel
     {
         [Required]

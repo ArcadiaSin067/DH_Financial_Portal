@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Financial_Portal.Models;
+using System.Text;
 
 namespace Financial_Portal.Controllers
 {
@@ -86,11 +87,14 @@ namespace Financial_Portal.Controllers
             }
             else
             {
-                if (epVM.AvatarPath == null) { epVM.AvatarPath = "/Images/default.png"; }
-                if (epVM.Email == null) { TempData["Message1"] = "A valid email is required" ;}
-                if (epVM.FirstName == null) { TempData["Message2"] = "First name is required"; }
-                if (epVM.LastName == null) { TempData["Message3"] = "Last name is required"; }
-
+                var errorMsg = new StringBuilder();
+                var allErrors = ModelState.Where(x => x.Value.Errors.Count > 0)
+                                         .Select(x => new { x.Key, x.Value.Errors }).ToList();
+                foreach (var error in allErrors.SelectMany(kvPair => kvPair.Errors.Select(error => error)))
+                {
+                    errorMsg.Append($"{error.ErrorMessage}|");
+                }
+                TempData["Message"] = errorMsg.ToString();
                 return View(epVM);
             }
         }

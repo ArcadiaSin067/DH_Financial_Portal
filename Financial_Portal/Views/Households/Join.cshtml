@@ -1,0 +1,29 @@
+﻿@using Financial_Portal.Models
+@model Financial_Portal.Models.AcceptInvitationViewModel
+@{
+    ViewBag.Title = "Join Household";
+    var db = new ApplicationDbContext();
+    var houseName = db.Households.Find(Model.HouseholdId).Name;
+}
+
+<div class="module" style="width:67%">
+    <div class="module-head">
+        <h3>@ViewBag.Title</h3>
+    </div>
+    <div class="module-body">
+        @using (Html.BeginForm("Join", "Households", FormMethod.Post, new { @class = "form-horizontal row-fluid"}))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.Code)
+            @Html.HiddenFor(m => m.HouseholdId)
+            <div class="control-group">
+                <label class="control-label" for="JoinHouse">@houseName</label>
+                <div class="controls">
+                    <button class="btn btn-large btn-primary" id="JoinHouse" style="color:white; margin-top:5px" type="submit">Join Household</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

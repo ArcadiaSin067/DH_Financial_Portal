@@ -1,5 +1,5 @@
 ﻿@using Financial_Portal.Helpers
-@model Financial_Portal.Models.RegisterViewModel
+@model Financial_Portal.Models.AcceptInvitationViewModel
 @{
     ViewBag.Title = "Register";
     Layout = "~/Views/Shared/_LoginShared.cshtml";
@@ -18,12 +18,26 @@
             <h3>@ViewBag.Title</h3>
         </div>
         <div class="modal-body">
-            <div class="control-group">
-                <div class="controls row-fluid wrap-input100 validate-input" data-validate="Valid email is required">
-                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-                    <input class="span12 input100" type="text" name="email" id="Email" placeholder="Email">
+            @if (ViewBag.HasCode == false)
+            {
+                <div class="control-group">
+                    <div class="controls row-fluid wrap-input100 validate-input" data-validate="Valid email is required">
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                        <input class="span12 input100" type="text" name="email" id="Email" placeholder="Email">
+                    </div>
                 </div>
-            </div>
+            }
+            else
+            { 
+                @Html.HiddenFor(m => m.Code)
+                @Html.HiddenFor(m => m.HouseholdId)
+                <div class="control-group">
+                    <div class="controls row-fluid wrap-input100 validate-input" data-validate="Valid email is required">
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                        @Html.TextBoxFor(model => model.Email, new { @class = "span12 input100", @readonly = "readonly" })
+                    </div>
+                </div>
+            }
             <div class="control-group">
                 <div class="controls row-fluid wrap-input100 validate-input" data-validate="First name is required">
                     <input class="span12 input100" type="text" name="firstname" id="FirstName" placeholder="First Name">
@@ -47,7 +61,7 @@
             <div class="control-group" style="max-height:65px">
                 <a data-toggle="modal" data-target="#AvatarModal">
                     <img class="span1" id="targetImg" src="@Model.AvatarPath" style="height:50px;width:50px;padding:5px;border:1px solid grey;margin:0" alt="img">
-                    @Html.Label("Click to change Avatar or leave default", new{ @class = "span2", style = "padding-left:10px; margin:0; width:72%; font-size:12px"})
+                    @Html.Label("Click to change Avatar or leave default", new { @class = "span2", style = "padding-left:10px; margin:0; width:72%; font-size:12px" })
                 </a>
             </div>
         </div>

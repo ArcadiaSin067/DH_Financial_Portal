@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using Financial_Portal.Extensions;
+using Financial_Portal.Helpers;
 using Financial_Portal.Models;
 
 namespace Financial_Portal.Controllers
@@ -51,22 +49,22 @@ namespace Financial_Portal.Controllers
         // POST: Invitations/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "TTL,RecipientEmail,HouseholdId")] Invitation invitations)
+        public async Task<ActionResult> Create([Bind(Include = "TTL,RecipientEmail,HouseholdId")] Invitation invite)
         {
-            if (ModelState.IsValid)
+            if (EmailHelper.IsValidEmail(invite.RecipientEmail) && invite.TTL > 0)
             {
-                invitations.Created = DateTime.Now;
-                invitations.Code = Guid.NewGuid();
-                invitations.IsValid = true;
-                db.Invitations.Add(invitations);
+                invite.Created = DateTime.Now;
+                invite.Code = Guid.NewGuid();
+                invite.IsValid = true;
+                db.Invitations.Add(invite);
                 db.SaveChanges();
-                await invitations.EmailInvitation();
-
-                return RedirectToAction("Index");
+                await invite.EmailInvitation();
+                var sentTo = invite.RecipientEmail;
+                TempData["Sent"] = $"Invitation sent to {sentTo}.";
+                return RedirectToAction("Index", "Home");
             }
-
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", invitations.HouseholdId);
-            return View(invitations);
+            TempData["Message"] = "Invite was unsuccessful.";
+            return View(invite);
         }
 
         // GET: Invitations/Edit/5

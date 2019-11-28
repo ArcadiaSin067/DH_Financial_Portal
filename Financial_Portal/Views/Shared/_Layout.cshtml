@@ -3,8 +3,10 @@
 @using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "Big_Bank";
+    var roleHelp = new RoleHelper();
     var db = new ApplicationDbContext();
     var user = db.Users.Find(User.Identity.GetUserId());
+    var role = roleHelp.ListUserRoles(user.Id).FirstOrDefault() ?? "Guest";
     var eConfirmed = user.EmailConfirmed;
     var avatar = user.AvatarPath;
     var name = user.FullName;
@@ -21,18 +23,18 @@
         .btn-navbar {
             background-image: linear-gradient(to bottom, #1d1d2d, #2f2f3f) !important;
         }
-
-            .btn-navbar:hover {
-                background-image: linear-gradient(to bottom, #1d2d4d, #2f3f5f) !important;
-            }
-
+        .btn-navbar:hover {
+            background-image: linear-gradient(to bottom, #1d2d4d, #2f3f5f) !important;
+        }
         .btn:hover {
             background-position: 0 0 !important;
         }
-
         .dropIcon {
             margin-top: 2px !important;
             padding-right: 5px !important;
+        }
+        .lessMargin {
+            margin:7px 5px !important;
         }
     </style>
 
@@ -55,7 +57,7 @@
                 <img src="~/Images/bigpig.png" style="position:absolute; top:5px; left:130px; max-height:75px; max-width:75px" />
                 <div class="nav-collapse collapse navbar-inverse-collapse">
                     <ul class="nav nav-icons">
-                        <li><a><i class="menu-icon icon-user" style="padding-right:5px"></i>Welcome, @name!</a></li>
+                        <li><a class="lessMargin">Welcome, @name!<br /> You are logged in as: "@role"</a></li>
                     </ul>
                     <ul class="nav pull-right">
                         <li class="dropdown">
@@ -217,18 +219,22 @@
     @RenderSection("scripts", required: false)
 
     <script>
-        var message1 = '@TempData["Message1"]';
-        var message2 = '@TempData["Message2"]';
-        var message3 = '@TempData["Message3"]';
-        const finalMessage = message1 + '<br />' + message2 + '<br />' + message3;
-        if (message1 != '' || message2 != '' || message3 != '') {
+        var message = '@TempData["Message"]';
+        if (message != '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops!',
-                html: finalMessage 
+                html: message.split("|").join("<br />")
             })
         };
-
+        var sentInvite = '@TempData["Sent"]';
+        if (sentInvite != '') {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: sentInvite
+            })
+        };
     </script>
 
 </body>

@@ -20,11 +20,64 @@ namespace Financial_Portal.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private RoleHelper roleHelper = new RoleHelper();
+        private InvitationHelper inviteHelp = new InvitationHelper();
 
         // GET: Households
         public ActionResult Index()
         {
             return View(db.Households.ToList());
+        }
+
+        // GET: Households/Join
+        public ActionResult Join(string recipientEmail, string code)
+        {
+            var realGuid = Guid.Parse(code);
+            var invitation = db.Invitations.FirstOrDefault(i => i.RecipientEmail == recipientEmail && i.Code == realGuid);
+            if (invitation == null) { TempData["Message"] = "No Invitation Found."; return RedirectToAction("Index", "Home"); }
+            var expirationDate = invitation.Created.AddDays(invitation.TTL);
+            if (invitation.IsValid && DateTime.Now < expirationDate)
+            {
+                var invitationVM = new AcceptInvitationViewModel
+                {
+                    Id = invitation.Id,
+                    Email = recipientEmail,
+                    Code = realGuid,
+                    HouseholdId = invitation.HouseholdId
+                };
+                return View(invitationVM);
+            }
+            else
+            {
+                TempData["Message"] = "This invitation expired or is no longer valid.";
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        // POST: Households/Join
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Join(JoinInvitationViewModel invitation)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = db.Users.Find(User.Identity.GetUserId());
+                var userRole = roleHelper.ListUserRoles(userId.Id).FirstOrDefault();
+                if (userRole != null)
+                {
+                    roleHelper.RemoveUserFromRole(userId.Id, userRole);
+                }
+                if (string.IsNullOrEmpty(userRole))
+                {
+                    roleHelper.AddUserToRole(userId.Id, "Member");
+                }
+                userId.HouseholdId = invitation.HouseholdId;
+                inviteHelp.MarkAsInvalid(invitation.Id);
+                db.SaveChanges();
+                await ControllerContext.HttpContext.RefreshAuthentication(userId);
+                TempData["Sent"] = "Household joined!";
+                return RedirectToAction("Index", "Home");
+            }
+            return View(invitation);
         }
 
         // GET: Households/Details/5
