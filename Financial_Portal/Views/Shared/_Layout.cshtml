@@ -1,6 +1,7 @@
 ﻿@using Financial_Portal.Helpers
 @using Financial_Portal.Models
 @using Microsoft.AspNet.Identity
+
 @{
     ViewBag.Title = "Big_Bank";
     var roleHelp = new RoleHelper();
@@ -43,9 +44,9 @@
     <link href="~/Content/bootstrap-responsive.min.css" rel="stylesheet" />
     <link href="~/Content/theme.css" rel="stylesheet" />
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css" />
     <link type="text/css" href='//fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600'
-          rel='stylesheet'>
+          rel='stylesheet' />
 </head>
 <body>
     <div class="navbar navbar-fixed-top">
@@ -136,8 +137,8 @@
                                             var invNum = $"/Invitations/Create/{user.HouseholdId}";
                                             <li><a href=@invNum><i class="icon-envelope dropIcon"></i>Invite </a></li>
                                         }
+                                        <li><a href="/Households/Leave"><i class="icon-remove dropIcon"></i>Leave </a></li>
                                     }
-                                    <li><a href="/Households/Index"><i class="icon-list-alt dropIcon"></i>Index </a></li>
                                 </ul>
                             </li>
                             <li>
@@ -215,24 +216,40 @@
     <script src="~/Scripts/jquery.dataTables.js"></script>
     <!-- Custom Scripts -->
     <script src="~/Scripts/common.js"></script>
-    
+
     @RenderSection("scripts", required: false)
 
     <script>
-        var message = '@TempData["Message"]';
-        if (message != '') {
+        var errors = '@TempData["Errors"]';
+        if (errors != '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops!',
-                html: message.split("|").join("<br />")
+                html: errors.split("|").join("<br />")
             })
         };
-        var sentInvite = '@TempData["Sent"]';
-        if (sentInvite != '') {
+        var warn = '@TempData["Warning"]';
+        if (warn != '') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning!',
+                text: warn
+            })
+        };
+        var success = '@TempData["Success"]';
+        if (success != '') {
             Swal.fire({
                 icon: 'success',
                 title: 'Success!',
-                text: sentInvite
+                text: success
+            })
+        };
+        var appointed = '@TempData["Appointed"]';
+        if (appointed != '') {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                html: appointed
             })
         };
     </script>

@@ -54,6 +54,18 @@ namespace Financial_Portal.Controllers
             }
         }
 
+        public void ErrorCompiler()
+        {
+            var errorMsg = new StringBuilder();
+            var allErrors = ModelState.Where(x => x.Value.Errors.Count > 0)
+                                      .Select(x => new { x.Key, x.Value.Errors }).ToList();
+            foreach (var error in allErrors.SelectMany(kvPair => kvPair.Errors.Select(error => error)))
+            {
+                errorMsg.Append($"{error.ErrorMessage}|");
+            }
+            TempData["Errors"] = errorMsg.ToString();
+        }
+
         //
         // Get: /Manage/EditProfile
         public ActionResult EditProfile()
@@ -87,14 +99,7 @@ namespace Financial_Portal.Controllers
             }
             else
             {
-                var errorMsg = new StringBuilder();
-                var allErrors = ModelState.Where(x => x.Value.Errors.Count > 0)
-                                         .Select(x => new { x.Key, x.Value.Errors }).ToList();
-                foreach (var error in allErrors.SelectMany(kvPair => kvPair.Errors.Select(error => error)))
-                {
-                    errorMsg.Append($"{error.ErrorMessage}|");
-                }
-                TempData["Message"] = errorMsg.ToString();
+                ErrorCompiler();
                 return View(epVM);
             }
         }
@@ -277,6 +282,7 @@ namespace Financial_Portal.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ErrorCompiler();
                 return View(model);
             }
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);

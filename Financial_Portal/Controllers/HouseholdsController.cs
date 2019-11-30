@@ -7,6 +7,8 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
+using System.Web.WebPages.Html;
 using Financial_Portal.Extensions;
 using Financial_Portal.Helpers;
 using Financial_Portal.Models;
@@ -28,12 +30,69 @@ namespace Financial_Portal.Controllers
             return View(db.Households.ToList());
         }
 
+        // GET: Households/Leave
+        public async Task<ActionResult> Leave()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = db.Users.Find(userId);
+            var myRole = roleHelper.ListUserRoles(userId).FirstOrDefault();
+            switch (myRole)
+            {
+                case "Head_Of_House":
+                    var occupants = db.Users.Where(u => u.HouseholdId == user.HouseholdId).Count();
+                    if (occupants > 1)
+                    {
+                        var myHouseId = user.HouseholdId;
+                        var members = db.Users.Where(u => u.HouseholdId == myHouseId && u.Id != userId);
+                        ViewBag.Successor = new SelectList(members, "Id", "FullName");
+                        return View();
+                    }
+                    else
+                    {
+                        var myHouse = db.Households.Find(user.HouseholdId);
+                        roleHelper.RemoveUserFromRole(userId, "Head_Of_House");
+                        db.Households.Remove(myHouse);
+                        user.HouseholdId = null;
+                        db.SaveChanges();
+                        await ControllerContext.HttpContext.RefreshAuthentication(user);
+                        TempData["Success"] = "You have successfully left / blown up your household.";
+                        return RedirectToAction("Index", "Home");
+                    }
+                case "Member":
+                default:
+                    roleHelper.RemoveUserFromRole(userId,"Member");
+                    user.HouseholdId = null;
+                    db.SaveChanges();
+                    await ControllerContext.HttpContext.RefreshAuthentication(user);
+                    TempData["Success"] = "You have successfully left / run away from your household.";
+                    return RedirectToAction("Index", "Home");
+            }
+
+        }
+
+        // POST: Households/Leave
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Leave(string successor)
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            var newHead = db.Users.Find(successor);
+            user.HouseholdId = null;
+            db.SaveChanges();
+            roleHelper.RemoveUserFromRole(user.Id, "Head_Of_House");
+            roleHelper.RemoveUserFromRole(newHead.Id, "Member");
+            roleHelper.AddUserToRole(newHead.Id, "Head_Of_House");
+            await ControllerContext.HttpContext.RefreshAuthentication(user);
+            TempData["Appointed"] = $"You have successfully left your household, and have appointed {newHead.FullName} as new head of your household.";
+            return RedirectToAction("Index", "Home");
+        }
+
         // GET: Households/Join
         public ActionResult Join(string recipientEmail, string code)
         {
             var realGuid = Guid.Parse(code);
             var invitation = db.Invitations.FirstOrDefault(i => i.RecipientEmail == recipientEmail && i.Code == realGuid);
-            if (invitation == null) { TempData["Message"] = "No Invitation Found."; return RedirectToAction("Index", "Home"); }
+            if (invitation == null) { TempData["Warning"] = "No Invitation Found."; return RedirectToAction("Index", "Home"); }
             var expirationDate = invitation.Created.AddDays(invitation.TTL);
             if (invitation.IsValid && DateTime.Now < expirationDate)
             {
@@ -48,7 +107,7 @@ namespace Financial_Portal.Controllers
             }
             else
             {
-                TempData["Message"] = "This invitation expired or is no longer valid.";
+                TempData["Warning"] = "This invitation expired or is no longer valid.";
                 return RedirectToAction("Index", "Home");
             }
         }
@@ -74,7 +133,8 @@ namespace Financial_Portal.Controllers
                 inviteHelp.MarkAsInvalid(invitation.Id);
                 db.SaveChanges();
                 await ControllerContext.HttpContext.RefreshAuthentication(userId);
-                TempData["Sent"] = "Household joined!";
+                var houseName = db.Households.Find(invitation.HouseholdId).Name;
+                TempData["Appointed"] = $"You joined the '{houseName}' household!";
                 return RedirectToAction("Index", "Home");
             }
             return View(invitation);
@@ -123,7 +183,8 @@ namespace Financial_Portal.Controllers
                 db.Users.Find(userId).HouseholdId = households.Id;
                 db.SaveChanges();
                 await ControllerContext.HttpContext.RefreshAuthentication(db.Users.Find(userId));
-                return RedirectToAction("Index");
+                TempData["Appointed"] = $"'{households.Name}' created.";
+                return RedirectToAction("Index", "Home");
             }
             return View(households);
         }

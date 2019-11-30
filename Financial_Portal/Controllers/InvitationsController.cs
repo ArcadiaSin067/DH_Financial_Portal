@@ -60,10 +60,10 @@ namespace Financial_Portal.Controllers
                 db.SaveChanges();
                 await invite.EmailInvitation();
                 var sentTo = invite.RecipientEmail;
-                TempData["Sent"] = $"Invitation sent to {sentTo}.";
+                TempData["Success"] = $"Invitation sent to {sentTo}.";
                 return RedirectToAction("Index", "Home");
             }
-            TempData["Message"] = "Invite was unsuccessful.";
+            TempData["Warning"] = "Invite was unsuccessful.";
             return View(invite);
         }
 

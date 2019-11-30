@@ -8,6 +8,15 @@
     .behind{
         z-index:-1;
     }
+    .avatarPic {
+        height:50px;
+        max-height:50px;
+        width:50px;
+        max-width:50px;
+        padding:5px;
+        border:1px solid #c2c2c2;
+        border-radius:3px;
+    }
 </style>
 <div class="module module-login span4 offset4">
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal validate-form", role = "form" }))
@@ -23,7 +32,7 @@
                 <div class="control-group">
                     <div class="controls row-fluid wrap-input100 validate-input" data-validate="Valid email is required">
                         @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-                        <input class="span12 input100" type="text" name="email" id="Email" placeholder="Email">
+                        <input class="span12 input100" type="text" name="email" id="Email" placeholder="Email" />
                     </div>
                 </div>
             }
@@ -40,28 +49,30 @@
             }
             <div class="control-group">
                 <div class="controls row-fluid wrap-input100 validate-input" data-validate="First name is required">
-                    <input class="span12 input100" type="text" name="firstname" id="FirstName" placeholder="First Name">
+                    <input class="span12 input100" type="text" name="firstname" id="FirstName" placeholder="First Name" />
                 </div>
             </div>
             <div class="control-group">
                 <div class="controls row-fluid wrap-input100 validate-input" data-validate="Last name is required">
-                    <input class="span12 input100" type="text" name="lastname" id="LastName" placeholder="Last Name">
+                    <input class="span12 input100" type="text" name="lastname" id="LastName" placeholder="Last Name" />
                 </div>
             </div>
             <div class="control-group">
                 <div class="controls row-fluid wrap-input100 validate-input" data-validate="Password is required">
-                    <input class="span12 input100" type="password" name="password" id="Password" placeholder="Password">
+                    <input class="span12 input100" type="password" name="password" id="Password" placeholder="Password" />
                 </div>
             </div>
             <div class="control-group">
                 <div class="controls row-fluid wrap-input100 validate-input" data-validate="Does not match password">
-                    <input class="span12 input100" type="password" name="confirmpassword" id="ConfirmPassword" placeholder="Confirm Password">
+                    <input class="span12 input100" type="password" name="confirmpassword" id="ConfirmPassword"
+                           placeholder="Confirm Password" />
                 </div>
             </div>
             <div class="control-group" style="max-height:65px">
                 <a data-toggle="modal" data-target="#AvatarModal">
-                    <img class="span1" id="targetImg" src="@Model.AvatarPath" style="height:50px;width:50px;padding:5px;border:1px solid grey;margin:0" alt="img">
-                    @Html.Label("Click to change Avatar or leave default", new { @class = "span2", style = "padding-left:10px; margin:0; width:72%; font-size:12px" })
+                    <img class="span1 avatarPic" id="targetImg" src="@Model.AvatarPath" style="margin:0" alt="img" />
+                    @Html.Label("Click to change Avatar or leave default", new { @class = "span2", style = "padding-left:10px;" +
+                   "            margin:5px 0 0 0; width:72%; font-size:12px" })
                 </a>
             </div>
         </div>
@@ -81,6 +92,7 @@
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h3 class="modal-title">Select An Avatar</h3>
             </div>
             <!-- Modal body -->

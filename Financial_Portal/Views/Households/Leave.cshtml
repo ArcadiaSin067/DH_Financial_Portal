@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "Leave Household";
+}
+
+<div class="module" style="width:80%">
+    <div class="module-head">
+        <h3>@ViewBag.Title</h3>
+    </div>
+    <div class="module-body">
+        <br />
+        @using (Html.BeginForm("Leave", "Households", FormMethod.Post, new { @class = "form-horizontal row-fluid" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="control-group">
+                <br />
+                <label class="control-label" for="LastName">Select a new successor before leaving</label>
+                <div class="controls">
+                    @Html.DropDownList("Successor", ViewBag.Successor as SelectList)
+                </div>
+            </div>
+            <div class="control-group">
+                <br />
+                <div class="controls">
+                    <button type="submit" class="btn btn-large btn-primary">Leave Household</button>
+                </div>
+            </div>
+            <br />
+        }
+    </div>
+</div>

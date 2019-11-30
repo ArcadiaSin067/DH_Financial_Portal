@@ -248,6 +248,11 @@
     <Content Include="Scripts\jquery-ui-1.10.1.custom.min.js" />
     <Content Include="Scripts\jquery.dataTables.js" />
     <Content Include="Scripts\main.js" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Shared\_LoginShared.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -257,8 +262,6 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
@@ -280,8 +283,6 @@
     <Content Include="Views\Manage\ManageLogins.cshtml" />
     <Content Include="Views\Manage\SetPassword.cshtml" />
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
-    <Content Include="Views\Shared\Lockout.cshtml" />
-    <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\BankAccounts\Create.cshtml" />
     <Content Include="Views\BankAccounts\Delete.cshtml" />
     <Content Include="Views\BankAccounts\Details.cshtml" />
@@ -336,11 +337,11 @@
     <Content Include="Content\fonts\fontawesome-webfont.woff2" />
     <Content Include="Content\fonts\fontawesome-webfont.eot" />
     <None Include="packages.config" />
-    <Content Include="Views\Shared\_LoginShared.cshtml" />
     <Content Include="Views\Account\NewlyRegistered.cshtml" />
     <Content Include="Views\Manage\EditProfile.cshtml" />
     <Content Include="Views\Households\Join.cshtml" />
     <Content Include="Views\Home\Dashboard.cshtml" />
+    <Content Include="Views\Households\Leave.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
