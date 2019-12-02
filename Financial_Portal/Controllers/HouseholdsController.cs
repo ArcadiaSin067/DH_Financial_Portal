@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.UI;
-using System.Web.WebPages.Html;
 using Financial_Portal.Extensions;
 using Financial_Portal.Helpers;
 using Financial_Portal.Models;
 using Microsoft.AspNet.Identity;
+using static Financial_Portal.Models.CustomViewModels;
 
 namespace Financial_Portal.Controllers
 {

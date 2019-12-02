@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -7,7 +6,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Financial_Portal.Models;
-using System.Text;
+using Financial_Portal.Helpers;
+using static Financial_Portal.Models.CustomViewModels;
 
 namespace Financial_Portal.Controllers
 {
@@ -54,18 +54,6 @@ namespace Financial_Portal.Controllers
             }
         }
 
-        public void ErrorCompiler()
-        {
-            var errorMsg = new StringBuilder();
-            var allErrors = ModelState.Where(x => x.Value.Errors.Count > 0)
-                                      .Select(x => new { x.Key, x.Value.Errors }).ToList();
-            foreach (var error in allErrors.SelectMany(kvPair => kvPair.Errors.Select(error => error)))
-            {
-                errorMsg.Append($"{error.ErrorMessage}|");
-            }
-            TempData["Errors"] = errorMsg.ToString();
-        }
-
         //
         // Get: /Manage/EditProfile
         public ActionResult EditProfile()
@@ -99,7 +87,7 @@ namespace Financial_Portal.Controllers
             }
             else
             {
-                ErrorCompiler();
+                TempData["Errors"] = ErrorReader.ErrorCompiler(ModelState);
                 return View(epVM);
             }
         }
@@ -282,7 +270,7 @@ namespace Financial_Portal.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ErrorCompiler();
+                TempData["Errors"] = ErrorReader.ErrorCompiler(ModelState);
                 return View(model);
             }
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);

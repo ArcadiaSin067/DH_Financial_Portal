@@ -186,6 +186,7 @@
     </Compile>
     <Compile Include="Helpers\AvatarHelper.cs" />
     <Compile Include="Helpers\EmailHelper.cs" />
+    <Compile Include="Helpers\ErrorReader.cs" />
     <Compile Include="Helpers\InvitationHelper.cs" />
     <Compile Include="Helpers\RoleHelper.cs" />
     <Compile Include="Migrations\Configuration.cs" />
@@ -193,6 +194,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BucketItem.cs" />
     <Compile Include="Models\Bucket.cs" />
+    <Compile Include="Models\CustomViewModels.cs" />
     <Compile Include="Models\EmailModel.cs" />
     <Compile Include="Models\Household.cs" />
     <Compile Include="Models\IdentityModels.cs" />
