@@ -136,6 +136,11 @@
                                             <li><a href=@headNum><i class="icon-edit dropIcon"></i>Edit </a></li>
                                             var invNum = $"/Invitations/Create/{user.HouseholdId}";
                                             <li><a href=@invNum><i class="icon-envelope dropIcon"></i>Invite </a></li>
+                                            if (!user.Household.IsConfigured)
+                                            {
+                                                var houseId = $"/Households/Configure/{user.HouseholdId}";
+                                                <li><a href=@houseId><i class="icon-cog dropIcon"></i>Configure </a></li>
+                                            }
                                         }
                                         <li><a href="/Households/Leave"><i class="icon-remove dropIcon"></i>Leave </a></li>
                                     }
@@ -183,7 +188,7 @@
                     </div>
                 </div>
                 <div class="span9">
-                    <div class="content" style="padding-top:15px;padding-left:30px">
+                    <div class="content" style="padding-top:15px">
                         @if (eConfirmed == true && User.Identity.IsAuthenticated)
                         {
                             @RenderBody()

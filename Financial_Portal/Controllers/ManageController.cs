@@ -1,13 +1,12 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
+﻿using System.Web;
+using System.Linq;
 using System.Web.Mvc;
+using System.Threading.Tasks;
+using Financial_Portal.Models;
+using Microsoft.Owin.Security;
+using Financial_Portal.Helpers;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using Financial_Portal.Models;
-using Financial_Portal.Helpers;
-using static Financial_Portal.Models.CustomViewModels;
 
 namespace Financial_Portal.Controllers
 {

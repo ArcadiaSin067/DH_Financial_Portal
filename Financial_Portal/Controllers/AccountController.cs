@@ -8,7 +8,6 @@ using Microsoft.Owin.Security;
 using Financial_Portal.Helpers;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using static Financial_Portal.Models.CustomViewModels;
 
 namespace Financial_Portal.Controllers
 {

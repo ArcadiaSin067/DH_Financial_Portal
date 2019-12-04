@@ -1,0 +1,134 @@
+﻿@model Financial_Portal.Models.ConfigureHouseViewModel
+@{
+    ViewBag.Title = "Configure Household";
+}
+<link href="~/Content/WizardCustom.css" rel="stylesheet" />
+<div class="row-fluid">
+    <div class="span2">
+        <div class="w3-sidebar w3-bar-block w3-black w3-card" style="width:130px; height:73vh; overflow-x:hidden; position:relative !important;">
+            <h5 class="w3-bar-item">House Wizard</h5>
+            <button id="step1btn" class="w3-bar-item w3-button w3-red tablink" onclick="openLink(event, 'Step1')">1) Account</button>
+            <button id="step2btn" class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Step2')">2) Bucket</button>
+            <button id="step3btn" class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Step3')">3) Bucket Item</button>
+            <button id="step4btn" class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Step4')">4) Submit</button>
+        </div>
+    </div>
+    <div class="span10">
+        <div style="padding-left:10px">
+            <div style="margin-top:10px"><h4>Let's collect a little more information to setup your new Household.</h4></div>
+            <hr style="border-color:#777; border-top: 0" />
+            @using (Html.BeginForm("Configure", "Households", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("HouseholdId", (int)ViewBag.HouseholdId)
+
+                <div id="Step1" class="w3-container step w3-animate-right">
+                    <h2>Add a Bank Account</h2><br />
+                    <div class="control-group">
+                        <label class="control-label" for="BankName">Account Name</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.BankName, new { placeholder = "Account" })
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="AccountType">Account Type</label>
+                        <div class="controls">
+                            @Html.EnumDropDownListFor(m => m.AccountType)
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="StartBal">Starting Balance</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.StartBal, new { pattern = "^\\$?(([1-9](\\d*|\\d{0,2}(,\\d{3})*))|0)(\\.\\d{1,2})?$", placeholder = "$ starting" })
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <br />
+                        <div class="controls">
+                            <a class="btn btn-large btn-primary pull-left" style="width:15%; min-width:10%; margin-right:10px" href="/Home/Index">Cancel</a>
+                            <a class="btn btn-large btn-primary" style="width:15%; min-width:10%" onclick="document.getElementById('step2btn').click()">Next</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="Step2" class="w3-container step w3-animate-right" style="display:none">
+                    <h2>Add an Expense Bucket</h2><br />
+                    <div class="control-group">
+                        <label class="control-label" for="BucketName">Bucket Name</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.BucketName, new { placeholder = "Name" })
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="TargetAmount">Set a Target Amount</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.TargetAmount, new { pattern = "^\\$?(([1-9](\\d*|\\d{0,2}(,\\d{3})*))|0)(\\.\\d{1,2})?$", placeholder = "$ Target" })
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <br />
+                        <div class="controls">
+                            <a class="btn btn-large btn-primary pull-left" style="width:15%; min-width:10%; margin-right:10px" onclick="document.getElementById('step1btn').click()">Previous</a>
+                            <a class="btn btn-large btn-primary" style="width:15%; min-width:10%" onclick="document.getElementById('step3btn').click()">Next</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="Step3" class="w3-container step w3-animate-right" style="display:none">
+                    <h2>Add a Bucket Item</h2><br />
+                    <div class="control-group">
+                        <label class="control-label" for="ItemName">Bucket Item Name</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.ItemName, new { placeholder = "Name" })
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="ItemTargetAmount">Set a Target Amount</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.ItemTargetAmount, new { pattern = "^\\$?(([1-9](\\d*|\\d{0,2}(,\\d{3})*))|0)(\\.\\d{1,2})?$", placeholder = "$ Item Target" })
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <br />
+                        <div class="controls">
+                            <a class="btn btn-large btn-primary pull-left" style="width:15%; min-width:10%; margin-right:10px" onclick="document.getElementById('step2btn').click()">Previous</a>
+                            <a class="btn btn-large btn-primary" style="width:15%; min-width:10%" onclick="document.getElementById('step4btn').click()">Next</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="Step4" class="w3-container step w3-animate-right" style="display:none">
+                    <h2>Submit your Information</h2><br />
+                    <p style="padding-left:15px">Once you are sure your information is correct please click submit to finalize your Household Creation.</p>
+                    <div class="control-group">
+                        <br />
+                        <div class="controls">
+                            <a class="btn btn-large btn-primary pull-left" style="width:15%; min-width:10%; margin-right:10px" onclick="document.getElementById('step3btn').click()">Previous</a>
+                            <button type="submit" class="btn btn-large btn-primary" style="width:15%; min-width:10%">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+
+        function openLink(evt, animName) {
+            var i, x, tablinks;
+            x = document.getElementsByClassName("step");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < x.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+            }
+            document.getElementById(animName).style.display = "block";
+            evt.currentTarget.className += " w3-red";
+        }
+    </script>
+}

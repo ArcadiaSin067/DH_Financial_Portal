@@ -11,6 +11,7 @@ namespace Financial_Portal.Models
         [Display(Name = "Household Name")]
         public string Name { get; set; }
         public DateTime Created { get; set; }
+        public bool IsConfigured { get; set; }
 
         //Nav section
         public virtual ICollection<Bucket> Buckets { get; set; }

@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
+using System.Data;
+using System.Linq;
 using System.Web.Mvc;
-using Financial_Portal.Extensions;
-using Financial_Portal.Helpers;
+using System.Data.Entity;
+using System.Threading.Tasks;
 using Financial_Portal.Models;
+using Financial_Portal.Helpers;
 using Microsoft.AspNet.Identity;
-using static Financial_Portal.Models.CustomViewModels;
+using Financial_Portal.Extensions;
 
 namespace Financial_Portal.Controllers
 {
@@ -181,9 +180,70 @@ namespace Financial_Portal.Controllers
                 db.SaveChanges();
                 await ControllerContext.HttpContext.RefreshAuthentication(db.Users.Find(userId));
                 TempData["Appointed"] = $"'{households.Name}' created.";
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Configure", "Households", new { id = households.Id});
             }
             return View(households);
+        }
+
+        // GET: Households/Configure/5
+        public ActionResult Configure(int? Id)
+        {
+            if (Id != null && Id != 0)
+            {
+                ViewBag.HouseholdId = (int)Id;
+                return View();
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        // POST: Households/Configure/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Configure(ConfigureHouseViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = db.Users.Find(User.Identity.GetUserId());
+                var bankAcount = new BankAccount
+                {
+                    OwnerId = user.Id,
+                    Name = model.BankName,
+                    Created = DateTime.Now,
+                    StartBal = model.StartBal,
+                    CurrentBal = model.StartBal,
+                    AccountType = model.AccountType,
+                    HouseholdId = model.HouseholdId
+                };
+                db.Accounts.Add(bankAcount);
+                db.SaveChanges();
+                var bucket = new Bucket
+                {
+                    CurrentAmount = 0,
+                    OwnerId = user.Id,
+                    Created = DateTime.Now,
+                    Name = model.BucketName,
+                    HouseholdId = model.HouseholdId,
+                    TargetAmount = model.TargetAmount
+                };
+                db.Buckets.Add(bucket);
+                db.SaveChanges();
+                var bucketItem = new BucketItem
+                {
+                    CurrentAmount = 0,
+                    BucketId = bucket.Id,
+                    Name = model.ItemName,
+                    Created = DateTime.Now,
+                    TargetAmount = model.ItemTargetAmount
+                };
+                db.BucketItems.Add(bucketItem);
+
+                user.Household.IsConfigured = true;
+                db.SaveChanges();
+                TempData["Success"] = "Your Household is now configured.";
+                return RedirectToAction("Index", "Home");
+            }
+            TempData["Errors"] = ErrorReader.ErrorCompiler(ModelState);
+            return RedirectToAction("Configure", "Households");
         }
 
         // GET: Households/Edit/5
