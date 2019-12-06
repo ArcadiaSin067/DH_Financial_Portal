@@ -218,8 +218,7 @@ namespace Financial_Portal.Controllers
                     OwnerId = user.Id,
                     Created = DateTime.Now,
                     Name = model.BucketName,
-                    HouseholdId = model.HouseholdId,
-                    TargetAmount = model.TargetAmount
+                    HouseholdId = model.HouseholdId
                 };
                 db.Buckets.Add(bucket);
                 db.SaveChanges();

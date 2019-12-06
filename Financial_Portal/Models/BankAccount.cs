@@ -13,10 +13,10 @@ namespace Financial_Portal.Models
         public string Name { get; set; }
 
         [Display(Name = "Starting Balance")]
-        public float StartBal { get; set; }
+        public double StartBal { get; set; }
 
         [Display(Name = "Current Balance")]
-        public float CurrentBal { get; set; }
+        public double CurrentBal { get; set; }
         public DateTime Created { get; set; }
 
         [Display(Name = "Account Type")]

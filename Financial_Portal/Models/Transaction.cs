@@ -9,7 +9,7 @@ namespace Financial_Portal.Models
     {
         public int Id { get; set; }
         public string Memo { get; set; }
-        public float Amount { get; set; }
+        public double Amount { get; set; }
         public DateTime Created { get; set; }
 
         [Display(Name = "Transaction Type")]

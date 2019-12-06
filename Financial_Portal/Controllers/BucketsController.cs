@@ -57,7 +57,7 @@ namespace Financial_Portal.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Created,TargetAmount,CurrentAmount,OwnerId,HouseholdId")] Bucket buckets)
+        public ActionResult Create([Bind(Include = "Id,Name,Created,CurrentAmount,OwnerId,HouseholdId")] Bucket buckets)
         {
             if (ModelState.IsValid)
             {
@@ -93,7 +93,7 @@ namespace Financial_Portal.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Created,TargetAmount,CurrentAmount,OwnerId,HouseholdId")] Bucket buckets)
+        public ActionResult Edit([Bind(Include = "Id,Name,Created,CurrentAmount,OwnerId,HouseholdId")] Bucket buckets)
         {
             if (ModelState.IsValid)
             {

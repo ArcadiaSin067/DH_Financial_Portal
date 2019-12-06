@@ -13,10 +13,10 @@ namespace Financial_Portal.Models
         public DateTime Created { get; set; }
 
         [Display(Name = "Target Amount")]
-        public float TargetAmount { get; set; }
+        public double TargetAmount { get; set; }
 
         [Display(Name = "Current Amount")]
-        public float CurrentAmount { get; set; }
+        public double CurrentAmount { get; set; }
 
         //foreign keys
         public int BucketId { get; set; }

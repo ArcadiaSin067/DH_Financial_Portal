@@ -149,9 +149,36 @@
                             </li>
                             @if (user.HouseholdId != null && user.Household.IsConfigured)
                             {
-                                <li><a href="/BankAccounts/Index"><i class="menu-icon icon-bold"></i>Bank Accounts </a></li>
-                                <li><a href="/Buckets/Index"><i class="menu-icon icon-book"></i>Buckets </a></li>
-                                <li><a href="/BucketItems/Index"><i class="menu-icon icon-paste"></i>Bucket Items </a></li>
+                                <li>
+                                    <a class="collapsed" data-toggle="collapse" href="#toggleBankAccount">
+                                        <i class="menu-icon icon-bold">
+                                        </i><i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right">
+                                        </i>Bank Accounts
+                                    </a>
+                                    <ul id="toggleBankAccount" class="collapse unstyled">
+                                        <li><a href="/BankAccounts/Index"><i class="menu-icon icon-list"></i>My Accounts </a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="collapsed" data-toggle="collapse" href="#toggleBucket">
+                                        <i class="menu-icon icon-inbox">
+                                        </i><i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right">
+                                        </i>Buckets
+                                    </a>
+                                    <ul id="toggleBucket" class="collapse unstyled">
+                                        <li><a href="/Buckets/Index"><i class="menu-icon icon-list"></i>My Buckets </a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="collapsed" data-toggle="collapse" href="#toggleBucketItem">
+                                        <i class="menu-icon icon-shopping-cart">
+                                        </i><i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right">
+                                        </i>Bucket Items
+                                    </a>
+                                    <ul id="toggleBucketItem" class="collapse unstyled">
+                                        <li><a href="/BucketItems/Index"><i class="menu-icon icon-list"></i>My bucket Items </a></li>
+                                    </ul>
+                                </li>
                             }
                             <li>
                                 <a href="message.html">

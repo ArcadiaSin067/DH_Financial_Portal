@@ -4,16 +4,17 @@
 }
 <link href="~/Content/WizardCustom.css" rel="stylesheet" />
 <div class="row-fluid">
-    <div class="span2">
-        <div class="w3-sidebar w3-bar-block w3-black w3-card" style="width:130px; height:73vh; overflow-x:hidden; position:relative !important;">
-            <h5 class="w3-bar-item">House Wizard</h5>
+    <div class="span2" style="min-width:120px">
+        <div class="w3-sidebar w3-bar-block w3-black w3-card" style="width:130px; height:52vh; overflow-x:hidden; border-radius:4px;
+                                                                     position:relative !important; background-color:#2d2b32 !important">
+            <h5 class="w3-bar-item" style="color:#fafafa; padding-left:23px"><u> House Wizard</u></h5>
             <button id="step1btn" class="w3-bar-item w3-button w3-red tablink" onclick="openLink(event, 'Step1')">1) Account</button>
             <button id="step2btn" class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Step2')">2) Bucket</button>
             <button id="step3btn" class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Step3')">3) Bucket Item</button>
             <button id="step4btn" class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Step4')">4) Submit</button>
         </div>
     </div>
-    <div class="span10">
+    <div class="span9">
         <div style="padding-left:10px">
             <div style="margin-top:10px"><h4>Let's collect a little more information to setup your new Household.</h4></div>
             <hr style="border-color:#777; border-top: 0" />
@@ -39,14 +40,14 @@
                     <div class="control-group">
                         <label class="control-label" for="StartBal">Starting Balance</label>
                         <div class="controls">
-                            @Html.TextBoxFor(m => m.StartBal)
+                            @Html.TextBoxFor(m => m.StartBal, new { maxlength = 4 })
                         </div>
                     </div>
                     <div class="control-group">
                         <br />
                         <div class="controls">
-                            <a class="btn btn-large btn-primary pull-left" style="width:15%; min-width:10%; margin-right:10px" href="/Home/Index">Cancel</a>
-                            <a class="btn btn-large btn-primary" style="width:15%; min-width:10%" onclick="document.getElementById('step2btn').click()">Next</a>
+                            <a class="btn btn-large btn-primary pull-left" style="width:15%; min-width:60px; margin-right:10px" href="/Home/Index">Cancel</a>
+                            <a class="btn btn-large btn-primary" style="width:15%; min-width:60px" onclick="document.getElementById('step2btn').click()">Next</a>
                         </div>
                     </div>
                 </div>
@@ -60,16 +61,10 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="TargetAmount">Set a Target Amount</label>
-                        <div class="controls">
-                            @Html.TextBoxFor(m => m.TargetAmount)
-                        </div>
-                    </div>
-                    <div class="control-group">
                         <br />
                         <div class="controls">
-                            <a class="btn btn-large btn-primary pull-left" style="width:15%; min-width:10%; margin-right:10px" onclick="document.getElementById('step1btn').click()">Previous</a>
-                            <a class="btn btn-large btn-primary" style="width:15%; min-width:10%" onclick="document.getElementById('step3btn').click()">Next</a>
+                            <a class="btn btn-large btn-primary pull-left" style="width:15%; min-width:60px; margin-right:10px" onclick="document.getElementById('step1btn').click()">Previous</a>
+                            <a class="btn btn-large btn-primary" style="width:15%; min-width:60px" onclick="document.getElementById('step3btn').click()">Next</a>
                         </div>
                     </div>
                 </div>
@@ -85,14 +80,14 @@
                     <div class="control-group">
                         <label class="control-label" for="ItemTargetAmount">Set a Target Amount</label>
                         <div class="controls">
-                            @Html.TextBoxFor(m => m.ItemTargetAmount)
+                            @Html.TextBoxFor(m => m.ItemTargetAmount, new { maxlength = 9 })
                         </div>
                     </div>
                     <div class="control-group">
                         <br />
                         <div class="controls">
-                            <a class="btn btn-large btn-primary pull-left" style="width:15%; min-width:10%; margin-right:10px" onclick="document.getElementById('step2btn').click()">Previous</a>
-                            <a class="btn btn-large btn-primary" style="width:15%; min-width:10%" onclick="document.getElementById('step4btn').click()">Next</a>
+                            <a class="btn btn-large btn-primary pull-left" style="width:15%; min-width:60px; margin-right:10px" onclick="document.getElementById('step2btn').click()">Previous</a>
+                            <a class="btn btn-large btn-primary" style="width:15%; min-width:60px" onclick="document.getElementById('step4btn').click()">Next</a>
                         </div>
                     </div>
                 </div>
@@ -103,8 +98,8 @@
                     <div class="control-group">
                         <br />
                         <div class="controls">
-                            <a class="btn btn-large btn-primary pull-left" style="width:15%; min-width:10%; margin-right:10px" onclick="document.getElementById('step3btn').click()">Previous</a>
-                            <button type="submit" class="btn btn-large btn-primary" style="width:15%; min-width:10%">Submit</button>
+                            <a class="btn btn-large btn-primary pull-left" style="width:15%; min-width:60px; margin-right:10px" onclick="document.getElementById('step3btn').click()">Previous</a>
+                            <button type="submit" class="btn btn-large btn-primary" style="width:15%; min-width:60px">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -116,16 +111,17 @@
 
 @section scripts{
     <script>
-        new AutoNumeric('#StartBal', { currencySymbol : '$' })
-        new AutoNumeric('#TargetAmount', { currencySymbol : '$' })
+        new AutoNumeric('#StartBal', { currencySymbol : '$', vMax: 9999999 })
         new AutoNumeric('#ItemTargetAmount', { currencySymbol : '$' })
 
         $("#wizFrm").submit(function (e) {
             e.preventDefault();
             form = document.getElementById("wizFrm");
             $.each(form.elements, function (i, el) {
-                if (el.name == "StartBal" || el.name == "TargetAmount" || el.name == "ItemTargetAmount") {
-                    el.value = el.value.split('$')[1].replace(/\,/g, '');
+                if (el.name == "StartBal" || el.name == "ItemTargetAmount") {
+                    if (el.value != "") {
+                        el.value = el.value.split('$')[1].replace(/\,/g, '');
+                    }
                 }
             })
             form.submit();
