@@ -6,7 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Financial_Portal.Helpers;
 using Financial_Portal.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Financial_Portal.Controllers
 {
@@ -15,12 +17,17 @@ namespace Financial_Portal.Controllers
     public class BankAccountsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private ShowMyStuff showStuff = new ShowMyStuff();
 
         // GET: BankAccounts
         public ActionResult Index()
         {
-            var accounts = db.Accounts.Include(a => a.Household).Include(a => a.Owner);
-            return View(accounts.ToList());
+            string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
+            return View(showStuff.MyStuffOnly(controllerName));
+
+
+            //var accounts = db.Accounts.Include(a => a.Household).Include(a => a.Owner);
+            //return View(accounts.ToList());
         }
 
         // GET: BankAccounts/Details/5

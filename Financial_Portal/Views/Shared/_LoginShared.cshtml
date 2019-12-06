@@ -7,6 +7,7 @@
     <title>Big_Bank</title>
 
     <style>
+        body {overflow-y:scroll;}
         .controls {
             margin-left: 0px !important;
         }
@@ -85,7 +86,7 @@
             </div>
         </div>
     </div>
-    <div class="wrapper" style="min-height:350px">
+    <div class="wrapper" style="min-height: 350px">
         <div class="container" style="min-height:350px;background:url('../Images/bigpig.png')no-repeat;
                                 background-size:230px; background-position-y:center; background-position-x:right">
             <div class="row" style="z-index:1!important">
@@ -104,7 +105,20 @@
     <script src="~/Scripts/jquery-ui-1.10.1.custom.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/main.js"></script>
+    <!--  Sweet Alert2 -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
     @RenderSection("scripts", required: false)
 
+    <script>
+        var errors = '@TempData["Errors"]';
+        if (errors != '') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops!',
+                html: errors.split("|").join("<br />")
+            })
+        };
+    </script>
 </body>
 </html>

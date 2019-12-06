@@ -52,21 +52,21 @@ namespace Financial_Portal.Models
         public string BankName { get; set; }
         [Required]
         public AccountTypes AccountType { get; set; }
-        [Required]
+        [Required, Range(0.01, 99999.99, ErrorMessage = "Enter number between 0.01 to 99999.99")]
         public float StartBal { get; set; }
 
 
         //bucket stuff
         [Required]
         public string BucketName { get; set; }
-        [Required]
+        [Required, Range(0.01, 99999.99, ErrorMessage = "Enter number between 0.01 to 99999.99")]
         public float TargetAmount { get; set; }
 
 
         //bucket item stuff
         [Required]
         public string ItemName { get; set; }
-        [Required]
+        [Required, Range(0.01, 99999.99, ErrorMessage = "Enter number between 0.01 to 99999.99")]
         public float ItemTargetAmount { get; set; }
 
     }

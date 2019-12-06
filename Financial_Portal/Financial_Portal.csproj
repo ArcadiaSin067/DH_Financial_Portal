@@ -189,6 +189,7 @@
     <Compile Include="Helpers\ErrorReader.cs" />
     <Compile Include="Helpers\InvitationHelper.cs" />
     <Compile Include="Helpers\RoleHelper.cs" />
+    <Compile Include="Helpers\ShowMyStuff.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BankAccount.cs" />
     <Compile Include="Models\AccountViewModels.cs" />

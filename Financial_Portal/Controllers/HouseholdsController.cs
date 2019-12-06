@@ -165,15 +165,11 @@ namespace Financial_Portal.Controllers
             if (ModelState.IsValid)
             {
                 var userId = User.Identity.GetUserId();
-                var userRole = roleHelper.ListUserRoles(userId).FirstOrDefault();
-                if (userRole != null)
+                foreach(var userRole in roleHelper.ListUserRoles(userId))
                 {
                     roleHelper.RemoveUserFromRole(userId, userRole);
                 }
-                if (string.IsNullOrEmpty(userRole))
-                {
-                    roleHelper.AddUserToRole(userId, "Head_Of_House");
-                }
+                roleHelper.AddUserToRole(userId, "Head_Of_House");
                 households.Created = DateTime.Now;
                 db.Households.Add(households);
                 db.Users.Find(userId).HouseholdId = households.Id;

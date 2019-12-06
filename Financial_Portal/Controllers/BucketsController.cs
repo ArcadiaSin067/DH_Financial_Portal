@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Financial_Portal.Helpers;
 using Financial_Portal.Models;
 
 namespace Financial_Portal.Controllers
@@ -15,12 +16,17 @@ namespace Financial_Portal.Controllers
     public class BucketsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private ShowMyStuff showStuff = new ShowMyStuff();
 
         // GET: Buckets
         public ActionResult Index()
         {
-            var buckets = db.Buckets.Include(b => b.Household).Include(b => b.Owner);
-            return View(buckets.ToList());
+            string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
+            return View(showStuff.MyStuffOnly(controllerName));
+
+
+            //var buckets = db.Buckets.Include(b => b.Household).Include(b => b.Owner);
+            //return View(buckets.ToList());
         }
 
         // GET: Buckets/Details/5

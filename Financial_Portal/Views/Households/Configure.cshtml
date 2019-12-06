@@ -17,17 +17,17 @@
         <div style="padding-left:10px">
             <div style="margin-top:10px"><h4>Let's collect a little more information to setup your new Household.</h4></div>
             <hr style="border-color:#777; border-top: 0" />
-            @using (Html.BeginForm("Configure", "Households", FormMethod.Post, new { @class = "form-horizontal" }))
+            @using (Html.BeginForm("Configure", "Households", FormMethod.Post, new { @class = "form-horizontal", id = "wizFrm" }))
             {
                 @Html.AntiForgeryToken()
                 @Html.Hidden("HouseholdId", (int)ViewBag.HouseholdId)
 
                 <div id="Step1" class="w3-container step w3-animate-right">
-                    <h2>Add a Bank Account</h2><br />
+                    <h2>Add 1 Bank Account to start</h2><br />
                     <div class="control-group">
                         <label class="control-label" for="BankName">Account Name</label>
                         <div class="controls">
-                            @Html.TextBoxFor(m => m.BankName, new { placeholder = "Account" })
+                            @Html.TextBoxFor(m => m.BankName, new { placeholder = "Account Name" })
                         </div>
                     </div>
                     <div class="control-group">
@@ -39,7 +39,7 @@
                     <div class="control-group">
                         <label class="control-label" for="StartBal">Starting Balance</label>
                         <div class="controls">
-                            @Html.TextBoxFor(m => m.StartBal, new { pattern = "^\\$?(([1-9](\\d*|\\d{0,2}(,\\d{3})*))|0)(\\.\\d{1,2})?$", placeholder = "$ starting" })
+                            @Html.TextBoxFor(m => m.StartBal)
                         </div>
                     </div>
                     <div class="control-group">
@@ -52,17 +52,17 @@
                 </div>
 
                 <div id="Step2" class="w3-container step w3-animate-right" style="display:none">
-                    <h2>Add an Expense Bucket</h2><br />
+                    <h2>Add 1 Expense Bucket to start</h2><br />
                     <div class="control-group">
                         <label class="control-label" for="BucketName">Bucket Name</label>
                         <div class="controls">
-                            @Html.TextBoxFor(m => m.BucketName, new { placeholder = "Name" })
+                            @Html.TextBoxFor(m => m.BucketName, new { placeholder = "ex. utilities" })
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="TargetAmount">Set a Target Amount</label>
                         <div class="controls">
-                            @Html.TextBoxFor(m => m.TargetAmount, new { pattern = "^\\$?(([1-9](\\d*|\\d{0,2}(,\\d{3})*))|0)(\\.\\d{1,2})?$", placeholder = "$ Target" })
+                            @Html.TextBoxFor(m => m.TargetAmount)
                         </div>
                     </div>
                     <div class="control-group">
@@ -75,17 +75,17 @@
                 </div>
 
                 <div id="Step3" class="w3-container step w3-animate-right" style="display:none">
-                    <h2>Add a Bucket Item</h2><br />
+                    <h2>Add 1 Bucket Item to start</h2><br />
                     <div class="control-group">
                         <label class="control-label" for="ItemName">Bucket Item Name</label>
                         <div class="controls">
-                            @Html.TextBoxFor(m => m.ItemName, new { placeholder = "Name" })
+                            @Html.TextBoxFor(m => m.ItemName, new { placeholder = "ex. electric bill" })
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="ItemTargetAmount">Set a Target Amount</label>
                         <div class="controls">
-                            @Html.TextBoxFor(m => m.ItemTargetAmount, new { pattern = "^\\$?(([1-9](\\d*|\\d{0,2}(,\\d{3})*))|0)(\\.\\d{1,2})?$", placeholder = "$ Item Target" })
+                            @Html.TextBoxFor(m => m.ItemTargetAmount)
                         </div>
                     </div>
                     <div class="control-group">
@@ -116,6 +116,21 @@
 
 @section scripts{
     <script>
+        new AutoNumeric('#StartBal', { currencySymbol : '$' })
+        new AutoNumeric('#TargetAmount', { currencySymbol : '$' })
+        new AutoNumeric('#ItemTargetAmount', { currencySymbol : '$' })
+
+        $("#wizFrm").submit(function (e) {
+            e.preventDefault();
+            form = document.getElementById("wizFrm");
+            $.each(form.elements, function (i, el) {
+                if (el.name == "StartBal" || el.name == "TargetAmount" || el.name == "ItemTargetAmount") {
+                    el.value = el.value.split('$')[1].replace(/\,/g, '');
+                }
+            })
+            form.submit();
+            return true;
+        });
 
         function openLink(evt, animName) {
             var i, x, tablinks;

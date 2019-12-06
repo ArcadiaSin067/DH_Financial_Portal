@@ -76,7 +76,6 @@ namespace Financial_Portal.Controllers
             {
                 return View(model);
             }
-
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
@@ -91,6 +90,7 @@ namespace Financial_Portal.Controllers
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
+                    TempData["Errors"] = ErrorReader.ErrorCompiler(ModelState);
                     return View(model);
             }
         }
@@ -193,6 +193,7 @@ namespace Financial_Portal.Controllers
                     return RedirectToAction("NewlyRegistered");
                 }
                 AddErrors(result);
+                TempData["Errors"] = ErrorReader.ErrorCompiler(ModelState);
             }
             // If we got this far, something failed, redisplay form
             return View(model);
@@ -255,6 +256,7 @@ namespace Financial_Portal.Controllers
                 return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
             // If we got this far, something failed, redisplay form
+            TempData["Errors"] = ErrorReader.ErrorCompiler(ModelState);
             return View(model);
         }
 
