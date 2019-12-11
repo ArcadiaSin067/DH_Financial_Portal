@@ -64,6 +64,7 @@ namespace Financial_Portal.Helpers
                     RecipientId = HoH.Id,
                     Title = "Expired Invitation"
                 };
+                db.Invitations.Find(invite.Id).IsValid = false;
                 db.Notifications.Add(notifyHead);
                 db.SaveChanges();
             }

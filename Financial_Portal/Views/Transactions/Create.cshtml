@@ -1,88 +1,78 @@
 ﻿@model Financial_Portal.Models.Transaction
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Create Transaction";
 }
 
-<h2>Create</h2>
 
-
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Transactions</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Created, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Created, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Created, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Memo, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Memo, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Memo, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.TransactionType, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EnumDropDownListFor(model => model.TransactionType, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.TransactionType, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.AccountId, "AccountId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("AccountId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.AccountId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.BucketItemId, "BucketItemId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("BucketItemId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.BucketItemId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.OwnerId, "OwnerId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("OwnerId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.OwnerId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
+<div class="module" style="width:80%">
+    <div class="module-head">
+        <h3>@ViewBag.Title</h3>
     </div>
-}
+    <div class="module-body">
+        @using (Html.BeginForm("Create", "Transactions", FormMethod.Post, new { @Class = "form-horizontal row-fluid", id = "transactFrm" }))
+        {
+            @Html.AntiForgeryToken()
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
+            <div class="control-group">
+                <label class="control-label" for="AccountId">Select Bank Account</label>
+                <div class="controls">
+                    @Html.DropDownList("AccountId", null, new { @class = "span8" })
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="BucketItemId">Select Bucket Item</label>
+                <div class="controls">
+                    @Html.DropDownList("BucketItemId", null, new { @class = "span8" })
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="TransactionType">Select Transaction Type</label>
+                <div class="controls">
+                    @Html.EnumDropDownListFor(m => m.TransactionType, null, new { @class = "span8" })
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Amount">Transaction Amount</label>
+                <div class="controls">
+                    @Html.TextBoxFor(m => m.Amount, null, new { @class = "span8" })
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Memo">Transaction Memo</label>
+                <div class="controls">
+                    @Html.TextAreaFor(m => m.Memo, new { @class = "span8" })
+                </div>
+            </div>
+            <div class="control-group">
+                <br />
+                <div class="controls">
+                    <button type="submit" class="pull-left btn btn-large btn-primary">Create</button>
+                    <a class="span4" style="margin-top:6px" href="/Transactions/Index">Back to List</a>
+                </div>
+            </div>
+
+        }
+    </div>
 </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+@section scripts{
+    <script>
+        new AutoNumeric('#Amount', { currencySymbol: '$', vMax: 9999999 })
+        $("#transactFrm").submit(function (e) {
+            e.preventDefault();
+            form = document.getElementById("transactFrm");
+            $.each(form.elements, function (i, el) {
+                if (el.name == "Amount") {
+                    if (el.value != "") {
+                        el.value = el.value.split('$')[1].replace(/\,/g, '');
+                    }
+                }
+            })
+            form.submit();
+            return true;
+        });
+
+    </script>
+
 }

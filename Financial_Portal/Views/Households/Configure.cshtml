@@ -142,7 +142,7 @@
             e.preventDefault();
             form = document.getElementById("wizFrm");
             $.each(form.elements, function (i, el) {
-                if (el.name == "StartBal" || el.name == "ItemTargetAmount") {
+                if (el.name == "StartBal" || el.name == "ItemTargetAmount" || el.name == "LowBalanceLevel") {
                     if (el.value != "") {
                         el.value = el.value.split('$')[1].replace(/\,/g, '');
                     }

@@ -20,11 +20,18 @@ namespace Financial_Portal.Controllers
         private InvitationHelper inviteHelp = new InvitationHelper();
         private NotificationsHelper notifyHelp = new NotificationsHelper();
         private RoleHelper roleHelper = new RoleHelper();
+        private ShowMyStuff showStuff = new ShowMyStuff();
 
         // GET: Households
         public ActionResult Index()
         {
-            return View(db.Households.ToList());
+            if (User.IsInRole("Admin"))
+            {
+                string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
+                return View(showStuff.MyStuffOnly(controllerName));
+            }
+            TempData["Warning"] = "That was an Unauthorized Area.";
+            return RedirectToAction("Index", "home");
         }
 
         // GET: Households/Leave

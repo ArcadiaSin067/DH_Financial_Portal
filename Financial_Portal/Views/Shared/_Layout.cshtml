@@ -49,7 +49,7 @@
                 <img src="~/Images/bigpig.png" style="position:absolute; top:5px; left:130px; max-height:75px; max-width:75px" />
                 <div class="nav-collapse collapse navbar-inverse-collapse">
                     <ul class="nav nav-icons">
-                        <li><a class="lessMargin">Welcome, @name!<br /> Current Role is: "@role"</a></li>
+                        <li><a class="lessMargin">Welcome, @name!<br /> Current Role: "@role"</a></li>
                     </ul>
                     <ul class="nav pull-right">
                         <li class="dropdown">
@@ -109,19 +109,19 @@
                                 @if (User.IsInRole("Head_Of_House"))
                                 {
                                     <a class="collapsed" data-toggle="collapse" href="#toggleNotifications">
-                                        <i class="menu-icon icon-exclamation-sign">
-                                        </i><i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right">
-                                        </i>Notifications <b class="label orange pull-right" style="margin-right:10px">@NotificationsHelper.GetUnreadNotifications().Count()</b>
+                                        <b class="label orange" style="margin-right:5px">@NotificationsHelper.GetUnreadNotifications().Count()</b>
+                                        <i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right">
+                                        </i>Notifications
                                     </a>
                                     <ul id="toggleNotifications" class="collapse unstyled">
                                         <li><a href="/Notifications/IndexHead"><i class="menu-icon icon-list"></i>Household Notifications </a></li>
-                                        <li><a href="/Notifications/Index"><i class="menu-icon icon-list"></i>My Notifications
-                                            <b class="label orange pull-right">@NotificationsHelper.GetUnreadNotifications().Count()</b></a></li>
+                                        <li><a href="/Notifications/Index"><b class="label orange" style="margin-right:7px">
+                                            @NotificationsHelper.GetUnreadNotifications().Count()</b>My Notifications </a></li>
                                     </ul>
                                 }
                                 else
                                 {
-                                    <a href="/Notifications/Index"><i class="menu-icon icon-list"></i>My Notifications
+                                    <a href="/Notifications/Index"><i class="menu-icon icon-list"></i>Notifications
                                         <b class="label orange pull-right">@NotificationsHelper.GetUnreadNotifications().Count()</b></a>
                                 }
                             </li>
@@ -139,18 +139,23 @@
                                     }
                                     else
                                     {
-                                        var houseNum = $"/Households/Details/{user.HouseholdId}";
-                                        <li><a href=@houseNum><i class="icon-info-sign dropIcon"></i>Current </a></li>
+                                        if (User.IsInRole("Admin"))
+                                        {
+                                            <li><a href="/Households/Index"><i class="icon-list-alt dropIcon"></i>All Households </a></li>
+                                        }
+                                        var myHouse = $"/Households/Details/{user.HouseholdId}";
+                                        <li><a href=@myHouse><i class="icon-info-sign dropIcon"></i>Current </a></li>
                                         if (User.IsInRole("Head_Of_House") || User.IsInRole("Admin"))
                                         {
-                                            var headNum = $"/Households/Edit/{user.HouseholdId}";
-                                            <li><a href=@headNum><i class="icon-edit dropIcon"></i>Edit </a></li>
-                                            var invNum = $"/Invitations/Create/{user.HouseholdId}";
-                                            <li><a href=@invNum><i class="icon-envelope dropIcon"></i>Invite </a></li>
+                                            var housEdit = $"/Households/Edit/{user.HouseholdId}";
+                                            <li><a href=@housEdit><i class="icon-edit dropIcon"></i>Edit </a></li>
+                                            <li><a href="/Invitations/Index"><i class="icon-list dropIcon"></i>All Invitations </a></li>
+                                            var invCreate = $"/Invitations/Create/{user.HouseholdId}";
+                                            <li><a href=@invCreate><i class="icon-envelope dropIcon"></i>Create Invite </a></li>
                                             if (!user.Household.IsConfigured)
                                             {
-                                                var houseId = $"/Households/Configure/{user.HouseholdId}";
-                                                <li><a href=@houseId><i class="icon-cog dropIcon"></i>Configure </a></li>
+                                                var houseConf = $"/Households/Configure/{user.HouseholdId}";
+                                                <li><a href=@houseConf><i class="icon-cog dropIcon"></i>Configure </a></li>
                                             }
                                         }
                                         <li><a href="/Households/Leave"><i class="icon-remove dropIcon"></i>Leave </a></li>
@@ -159,6 +164,17 @@
                             </li>
                             @if (user.HouseholdId != null && user.Household.IsConfigured)
                             {
+                                <li>
+                                    <a class="collapsed" data-toggle="collapse" href="#toggleTransactions">
+                                        <i class="menu-icon icon-hdd">
+                                        </i><i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right">
+                                        </i>Transactions
+                                    </a>
+                                    <ul id="toggleTransactions" class="collapse unstyled">
+                                        <li><a href="/Transactions/Index"><i class="menu-icon icon-list"></i>My Transactions </a></li>
+                                        <li><a href="/Transactions/Create"><i class="menu-icon icon-barcode"></i>Create </a></li>
+                                    </ul>
+                                </li>
                                 <li>
                                     <a class="collapsed" data-toggle="collapse" href="#toggleBankAccount">
                                         <i class="menu-icon icon-bold">
@@ -186,7 +202,7 @@
                                         </i>Bucket Items
                                     </a>
                                     <ul id="toggleBucketItem" class="collapse unstyled">
-                                        <li><a href="/BucketItems/Index"><i class="menu-icon icon-list"></i>My bucket Items </a></li>
+                                        <li><a href="/BucketItems/Index"><i class="menu-icon icon-list"></i>My Bucket Items </a></li>
                                     </ul>
                                 </li>
                             }
@@ -204,8 +220,6 @@
                                     </b>
                                 </a>
                             </li>
-                            <li><a href="table.html"><i class="menu-icon icon-table"></i>Tables </a></li>
-                            <li><a href="charts.html"><i class="menu-icon icon-bar-chart"></i>Charts </a></li>
                         </ul>
                         <ul class="widget widget-menu unstyled">
                             <li>
@@ -279,7 +293,7 @@
         var noNotify = '@TempData["NoNotifications"]';
         if (noNotify != '') {
             Swal.fire({
-                title: 'Sorry!',
+                title: 'Oops...',
                 text: noNotify
             })
         };

@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
 using System.Net;
-using System.Web;
+using System.Data;
+using System.Linq;
 using System.Web.Mvc;
+using System.Data.Entity;
 using Financial_Portal.Models;
+using Financial_Portal.Helpers;
+using Microsoft.AspNet.Identity;
 
 namespace Financial_Portal.Controllers
 {
@@ -15,12 +15,17 @@ namespace Financial_Portal.Controllers
     public class TransactionsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private ShowMyStuff showStuff = new ShowMyStuff();
 
         // GET: Transactions
         public ActionResult Index()
         {
-            var transactions = db.Transactions.Include(t => t.Account).Include(t => t.BucketItem).Include(t => t.Owner);
-            return View(transactions.ToList());
+            string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
+            return View(showStuff.MyStuffOnly(controllerName));
+
+
+            //var transactions = db.Transactions.Include(t => t.Account).Include(t => t.BucketItem).Include(t => t.Owner);
+            //return View(transactions.ToList());
         }
 
         // GET: Transactions/Details/5
@@ -41,9 +46,9 @@ namespace Financial_Portal.Controllers
         // GET: Transactions/Create
         public ActionResult Create()
         {
-            ViewBag.AccountId = new SelectList(db.Accounts, "Id", "Name");
-            ViewBag.BucketItemId = new SelectList(db.BucketItems, "Id", "Name");
-            ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName");
+            var houseId = db.Users.Find(User.Identity.GetUserId()).HouseholdId ?? 0;
+            ViewBag.AccountId = new SelectList(db.Accounts.Where(b => b.HouseholdId == houseId), "Id", "Name");
+            ViewBag.BucketItemId = new SelectList(db.BucketItems.Where(b => b.Bucket.HouseholdId  == houseId), "Id", "Name");
             return View();
         }
 
@@ -52,19 +57,20 @@ namespace Financial_Portal.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Amount,Created,Memo,TransactionType,AccountId,BucketItemId,OwnerId")] Transaction transactions)
+        public ActionResult Create([Bind(Include = "Amount,Memo,TransactionType,AccountId,BucketItemId")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
-                db.Transactions.Add(transactions);
+                transaction.OwnerId = User.Identity.GetUserId();
+                transaction.Created = DateTime.Now;
+                db.Transactions.Add(transaction);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            ViewBag.AccountId = new SelectList(db.Accounts, "Id", "Name", transactions.AccountId);
-            ViewBag.BucketItemId = new SelectList(db.BucketItems, "Id", "Name", transactions.BucketItemId);
-            ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName", transactions.OwnerId);
-            return View(transactions);
+            var houseId = db.Users.Find(User.Identity.GetUserId()).HouseholdId ?? 0;
+            ViewBag.AccountId = new SelectList(db.Accounts.Where(b => b.HouseholdId == houseId), "Id", "Name", transaction.AccountId);
+            ViewBag.BucketItemId = new SelectList(db.BucketItems.Where(b => b.Bucket.HouseholdId == houseId), "Id", "Name", transaction.BucketItemId);
+            return View(transaction);
         }
 
         // GET: Transactions/Edit/5

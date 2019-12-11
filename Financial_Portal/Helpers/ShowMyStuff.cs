@@ -20,8 +20,14 @@ namespace Financial_Portal.Helpers
                     return db.Buckets.Where(b => b.HouseholdId == user.HouseholdId).ToList();
                 case "BucketItems":
                     return db.Households.Find(user.HouseholdId).Buckets.SelectMany(b => b.BucketItems).ToList();
+                case "Invitations":
+                    return db.Invitations.Where(i => i.HouseholdId == user.HouseholdId).ToList();
+                case "Households":
+                    return db.Households.ToList();
                 case "Notifications":
                     return NotificationsHelper.GetUnreadNotifications();
+                case "Transactions":
+                    return db.Transactions.Where(t => t.Account.HouseholdId == user.HouseholdId).ToList();
                 default:
                     return null;
             }

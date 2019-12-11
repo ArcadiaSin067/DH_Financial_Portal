@@ -37,10 +37,10 @@ namespace Financial_Portal.Controllers
         public ActionResult IndexHead()
         {
             var user = db.Users.Find(User.Identity.GetUserId());
-            var notifications = db.Notifications.Where(n => n.HouseholdId == user.HouseholdId);
+            var notifications = db.Notifications.Where(n => n.HouseholdId == user.HouseholdId).ToList();
             if (notifications.Count() > 0)
             {
-                return View(notifications.ToList());
+                return View(notifications);
             }
             TempData["NoNotifications"] = "Your household has no Notifications yet.";
             return RedirectToAction("Index", "Home");

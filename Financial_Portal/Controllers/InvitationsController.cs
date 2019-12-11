@@ -15,12 +15,17 @@ namespace Financial_Portal.Controllers
     public class InvitationsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private ShowMyStuff showStuff = new ShowMyStuff();
 
         // GET: Invitations
         public ActionResult Index()
         {
-            var invitations = db.Invitations.Include(i => i.Household);
-            return View(invitations.ToList());
+            string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
+            return View(showStuff.MyStuffOnly(controllerName));
+
+
+            //var invitations = db.Invitations.Include(i => i.Household);
+            //return View(invitations.ToList());
         }
 
         // GET: Invitations/Details/5
