@@ -5,11 +5,15 @@ using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.ComponentModel.DataAnnotations.Schema;
+using Financial_Portal.Helpers;
+using System.Linq;
 
 namespace Financial_Portal.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        private RoleHelper rhelp = new RoleHelper();
+
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string AvatarPath { get; set; }
@@ -19,6 +23,14 @@ namespace Financial_Portal.Models
             get
             {
                 return $"{FirstName} {LastName}";
+            }
+        }
+        [NotMapped]
+        public string UserRole
+        {
+            get
+            {
+                return $"{rhelp.ListUserRoles(Id).FirstOrDefault()}";
             }
         }
 

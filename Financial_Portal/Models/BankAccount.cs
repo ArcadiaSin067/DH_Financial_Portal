@@ -19,8 +19,12 @@ namespace Financial_Portal.Models
         public double CurrentBal { get; set; }
         public DateTime Created { get; set; }
 
+        [Display(Name = "Low Balance")]
+        public double LowBalanceLevel { get; set; }
+
         [Display(Name = "Account Type")]
         public AccountTypes AccountType { get; set; }
+
 
         //foreign keys
         public string OwnerId { get; set; }

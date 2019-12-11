@@ -8,6 +8,7 @@
     var db = new ApplicationDbContext();
     var user = db.Users.Find(User.Identity.GetUserId());
     var role = roleHelp.ListUserRoles(user.Id).FirstOrDefault() ?? "Guest";
+    if (role == "Head_Of_House") { role = "Head of House"; }
     var eConfirmed = user.EmailConfirmed;
     var avatar = user.AvatarPath;
     var name = user.FullName;
@@ -21,22 +22,11 @@
     <title>@ViewBag.Title</title>
 
     <style>
-        .btn-navbar {
-            background-image: linear-gradient(to bottom, #1d1d2d, #2f2f3f) !important;
-        }
-        .btn-navbar:hover {
-            background-image: linear-gradient(to bottom, #1d2d4d, #2f3f5f) !important;
-        }
-        .btn:hover {
-            background-position: 0 0 !important;
-        }
-        .dropIcon {
-            margin-top: 2px !important;
-            padding-right: 5px !important;
-        }
-        .lessMargin {
-            margin:7px 5px !important;
-        }
+        .btn-navbar {background-image: linear-gradient(to bottom, #1d1d2d, #2f2f3f) !important;}
+        .btn-navbar:hover {background-image: linear-gradient(to bottom, #1d2d4d, #2f3f5f) !important;}
+        .btn:hover {background-position: 0 0 !important;}
+        .dropIcon {margin-top: 2px !important;padding-right: 5px !important;}
+        .lessMargin {margin:7px 5px !important;}
         body {overflow-y:scroll;}
 }    </style>
 
@@ -59,7 +49,7 @@
                 <img src="~/Images/bigpig.png" style="position:absolute; top:5px; left:130px; max-height:75px; max-width:75px" />
                 <div class="nav-collapse collapse navbar-inverse-collapse">
                     <ul class="nav nav-icons">
-                        <li><a class="lessMargin">Welcome, @name!<br /> You are logged in as: "@role"</a></li>
+                        <li><a class="lessMargin">Welcome, @name!<br /> Current Role is: "@role"</a></li>
                     </ul>
                     <ul class="nav pull-right">
                         <li class="dropdown">
@@ -114,6 +104,26 @@
                                 <a href="/Home/Index">
                                     <i class="menu-icon icon-th-list"></i>Dashboard
                                 </a>
+                            </li>
+                            <li>
+                                @if (User.IsInRole("Head_Of_House"))
+                                {
+                                    <a class="collapsed" data-toggle="collapse" href="#toggleNotifications">
+                                        <i class="menu-icon icon-exclamation-sign">
+                                        </i><i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right">
+                                        </i>Notifications <b class="label orange pull-right" style="margin-right:10px">@NotificationsHelper.GetUnreadNotifications().Count()</b>
+                                    </a>
+                                    <ul id="toggleNotifications" class="collapse unstyled">
+                                        <li><a href="/Notifications/IndexHead"><i class="menu-icon icon-list"></i>Household Notifications </a></li>
+                                        <li><a href="/Notifications/Index"><i class="menu-icon icon-list"></i>My Notifications
+                                            <b class="label orange pull-right">@NotificationsHelper.GetUnreadNotifications().Count()</b></a></li>
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <a href="/Notifications/Index"><i class="menu-icon icon-list"></i>My Notifications
+                                        <b class="label orange pull-right">@NotificationsHelper.GetUnreadNotifications().Count()</b></a>
+                                }
                             </li>
                             <li>
                                 <a class="collapsed" data-toggle="collapse" href="#toggleHome">
@@ -264,6 +274,13 @@
                 icon: 'error',
                 title: 'Oops!',
                 html: errors.split("|").join("<br />")
+            })
+        };
+        var noNotify = '@TempData["NoNotifications"]';
+        if (noNotify != '') {
+            Swal.fire({
+                title: 'Sorry!',
+                text: noNotify
             })
         };
         var warn = '@TempData["Warning"]';

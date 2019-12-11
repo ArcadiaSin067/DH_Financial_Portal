@@ -17,8 +17,9 @@ namespace Financial_Portal.Controllers
     public class HouseholdsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private RoleHelper roleHelper = new RoleHelper();
         private InvitationHelper inviteHelp = new InvitationHelper();
+        private NotificationsHelper notifyHelp = new NotificationsHelper();
+        private RoleHelper roleHelper = new RoleHelper();
 
         // GET: Households
         public ActionResult Index()
@@ -115,20 +116,19 @@ namespace Financial_Portal.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userId = db.Users.Find(User.Identity.GetUserId());
-                var userRole = roleHelper.ListUserRoles(userId.Id).FirstOrDefault();
+                var user = db.Users.Find(User.Identity.GetUserId());
+                var userRole = roleHelper.ListUserRoles(user.Id).FirstOrDefault();
                 if (userRole != null)
                 {
-                    roleHelper.RemoveUserFromRole(userId.Id, userRole);
+                    roleHelper.RemoveUserFromRole(user.Id, userRole);
                 }
-                if (string.IsNullOrEmpty(userRole))
-                {
-                    roleHelper.AddUserToRole(userId.Id, "Member");
-                }
-                userId.HouseholdId = invitation.HouseholdId;
+                roleHelper.AddUserToRole(user.Id, "Member");
+                user.HouseholdId = invitation.HouseholdId;
+                var invite = db.Invitations.Find(invitation.Id);
+                notifyHelp.DidTheyJoinUp(invite);
                 inviteHelp.MarkAsInvalid(invitation.Id);
                 db.SaveChanges();
-                await ControllerContext.HttpContext.RefreshAuthentication(userId);
+                await ControllerContext.HttpContext.RefreshAuthentication(user);
                 var houseName = db.Households.Find(invitation.HouseholdId).Name;
                 TempData["Appointed"] = $"You joined the '{houseName}' household!";
                 return RedirectToAction("Index", "Home");
@@ -184,7 +184,7 @@ namespace Financial_Portal.Controllers
         // GET: Households/Configure/5
         public ActionResult Configure(int? Id)
         {
-            if (Id != null && Id != 0)
+            if (Id != null && Id != 0 && db.Users.Find(User.Identity.GetUserId()).Household.IsConfigured == false)
             {
                 ViewBag.HouseholdId = (int)Id;
                 return View();
@@ -200,7 +200,7 @@ namespace Financial_Portal.Controllers
             if (ModelState.IsValid)
             {
                 var user = db.Users.Find(User.Identity.GetUserId());
-                var bankAcount = new BankAccount
+                var bankAccount = new BankAccount
                 {
                     OwnerId = user.Id,
                     Name = model.BankName,
@@ -208,9 +208,10 @@ namespace Financial_Portal.Controllers
                     StartBal = model.StartBal,
                     CurrentBal = model.StartBal,
                     AccountType = model.AccountType,
-                    HouseholdId = model.HouseholdId
+                    HouseholdId = model.HouseholdId,
+                    LowBalanceLevel = model.LowBalanceLevel
                 };
-                db.Accounts.Add(bankAcount);
+                db.Accounts.Add(bankAccount);
                 db.SaveChanges();
                 var bucket = new Bucket
                 {

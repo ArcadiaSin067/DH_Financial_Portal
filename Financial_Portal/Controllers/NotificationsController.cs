@@ -6,7 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Financial_Portal.Helpers;
 using Financial_Portal.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Financial_Portal.Controllers
 {
@@ -15,12 +17,33 @@ namespace Financial_Portal.Controllers
     public class NotificationsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private ShowMyStuff showStuff = new ShowMyStuff();
 
         // GET: Notifications
         public ActionResult Index()
         {
-            var notifications = db.Notifications.Include(n => n.Household).Include(n => n.Recipient);
-            return View(notifications.ToList());
+            if (NotificationsHelper.GetUnreadNotifications().Count() > 0)
+            {
+                string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
+                var notifications = showStuff.MyStuffOnly(controllerName);
+                return View(notifications);
+            }
+            TempData["NoNotifications"] = "You have no unread Notifications.";
+            return RedirectToAction("Index", "Home");
+        }
+
+        // GET: Notifications/IndexHead
+        [Authorize(Roles = "Admin, Head_Of_House")]
+        public ActionResult IndexHead()
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            var notifications = db.Notifications.Where(n => n.HouseholdId == user.HouseholdId);
+            if (notifications.Count() > 0)
+            {
+                return View(notifications.ToList());
+            }
+            TempData["NoNotifications"] = "Your household has no Notifications yet.";
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Notifications/Details/5

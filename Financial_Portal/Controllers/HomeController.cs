@@ -1,4 +1,6 @@
-﻿using Financial_Portal.Models;
+﻿using Financial_Portal.Helpers;
+using Financial_Portal.Models;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +14,20 @@ namespace Financial_Portal.Controllers
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private NotificationsHelper notifyHelp = new NotificationsHelper();
+        private RoleHelper roleHelp = new RoleHelper();
 
         public ActionResult Index()
         {
+            if (User.IsInRole("Head_Of_House"))
+            {
+                var user = db.Users.Find(User.Identity.GetUserId());
+                var invitations = user.Household.Invitations.Where(i => i.HouseholdId == user.HouseholdId);
+                foreach (var invite in invitations)
+                {
+                    notifyHelp.DidTheyJoinUp(invite);
+                }
+            }
             return View();
         }
 

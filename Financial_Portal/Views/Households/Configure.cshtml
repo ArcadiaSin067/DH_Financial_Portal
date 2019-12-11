@@ -2,12 +2,29 @@
 @{
     ViewBag.Title = "Configure Household";
 }
+
 <link href="~/Content/WizardCustom.css" rel="stylesheet" />
+<style>
+    .wizBtn, .wizBtn-Left {
+        min-width:60px !important;
+    }
+    .wizBtn-Left {
+        margin-right:10px;
+    }
+    .myBar {
+        width: 130px !important;
+        height: 59.75vh !important;
+        overflow-x: hidden !important;
+        border-radius: 4px !important;
+        position: relative !important;
+        background-color: #2d2b32 !important;
+    }
+</style>
+
 <div class="row-fluid">
     <div class="span2" style="min-width:120px">
-        <div class="w3-sidebar w3-bar-block w3-black w3-card" style="width:130px; height:52vh; overflow-x:hidden; border-radius:4px;
-                                                                     position:relative !important; background-color:#2d2b32 !important">
-            <h5 class="w3-bar-item" style="color:#fafafa; padding-left:23px"><u> House Wizard</u></h5>
+        <div class="w3-sidebar w3-bar-block w3-card myBar">
+            <h5 class="w3-bar-item" style="color:#fafafa; padding-left:23px"> House Wizard</h5>
             <button id="step1btn" class="w3-bar-item w3-button w3-red tablink" onclick="openLink(event, 'Step1')">1) Account</button>
             <button id="step2btn" class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Step2')">2) Bucket</button>
             <button id="step3btn" class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Step3')">3) Bucket Item</button>
@@ -17,7 +34,7 @@
     <div class="span9">
         <div style="padding-left:10px">
             <div style="margin-top:10px"><h4>Let's collect a little more information to setup your new Household.</h4></div>
-            <hr style="border-color:#777; border-top: 0" />
+            <hr style="border-color:#bbbbbb; border-top: 0" />
             @using (Html.BeginForm("Configure", "Households", FormMethod.Post, new { @class = "form-horizontal", id = "wizFrm" }))
             {
                 @Html.AntiForgeryToken()
@@ -40,14 +57,20 @@
                     <div class="control-group">
                         <label class="control-label" for="StartBal">Starting Balance</label>
                         <div class="controls">
-                            @Html.TextBoxFor(m => m.StartBal, new { maxlength = 4 })
+                            @Html.TextBoxFor(m => m.StartBal)
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="LowBalanceLevel">Set Low Balance Level</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.LowBalanceLevel)
                         </div>
                     </div>
                     <div class="control-group">
                         <br />
                         <div class="controls">
-                            <a class="btn btn-large btn-primary pull-left" style="width:15%; min-width:60px; margin-right:10px" href="/Home/Index">Cancel</a>
-                            <a class="btn btn-large btn-primary" style="width:15%; min-width:60px" onclick="document.getElementById('step2btn').click()">Next</a>
+                            <a class="btn btn-large btn-primary pull-left wizBtn-Left" href="/Home/Index">Cancel</a>
+                            <a class="btn btn-large btn-primary wizBtn" onclick="document.getElementById('step2btn').click()">Next</a>
                         </div>
                     </div>
                 </div>
@@ -63,8 +86,8 @@
                     <div class="control-group">
                         <br />
                         <div class="controls">
-                            <a class="btn btn-large btn-primary pull-left" style="width:15%; min-width:60px; margin-right:10px" onclick="document.getElementById('step1btn').click()">Previous</a>
-                            <a class="btn btn-large btn-primary" style="width:15%; min-width:60px" onclick="document.getElementById('step3btn').click()">Next</a>
+                            <a class="btn btn-large btn-primary pull-left wizBtn-Left" onclick="document.getElementById('step1btn').click()">Previous</a>
+                            <a class="btn btn-large btn-primary wizBtn" onclick="document.getElementById('step3btn').click()">Next</a>
                         </div>
                     </div>
                 </div>
@@ -80,14 +103,14 @@
                     <div class="control-group">
                         <label class="control-label" for="ItemTargetAmount">Set a Target Amount</label>
                         <div class="controls">
-                            @Html.TextBoxFor(m => m.ItemTargetAmount, new { maxlength = 9 })
+                            @Html.TextBoxFor(m => m.ItemTargetAmount)
                         </div>
                     </div>
                     <div class="control-group">
                         <br />
                         <div class="controls">
-                            <a class="btn btn-large btn-primary pull-left" style="width:15%; min-width:60px; margin-right:10px" onclick="document.getElementById('step2btn').click()">Previous</a>
-                            <a class="btn btn-large btn-primary" style="width:15%; min-width:60px" onclick="document.getElementById('step4btn').click()">Next</a>
+                            <a class="btn btn-large btn-primary pull-left wizBtn-Left" onclick="document.getElementById('step2btn').click()">Previous</a>
+                            <a class="btn btn-large btn-primary wizBtn" onclick="document.getElementById('step4btn').click()">Next</a>
                         </div>
                     </div>
                 </div>
@@ -98,8 +121,8 @@
                     <div class="control-group">
                         <br />
                         <div class="controls">
-                            <a class="btn btn-large btn-primary pull-left" style="width:15%; min-width:60px; margin-right:10px" onclick="document.getElementById('step3btn').click()">Previous</a>
-                            <button type="submit" class="btn btn-large btn-primary" style="width:15%; min-width:60px">Submit</button>
+                            <a class="btn btn-large btn-primary pull-left wizBtn-Left" onclick="document.getElementById('step3btn').click()">Previous</a>
+                            <button type="submit" class="btn btn-large btn-primary wizBtn">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -111,8 +134,9 @@
 
 @section scripts{
     <script>
-        new AutoNumeric('#StartBal', { currencySymbol : '$', vMax: 9999999 })
-        new AutoNumeric('#ItemTargetAmount', { currencySymbol : '$' })
+        new AutoNumeric('#StartBal', { currencySymbol: '$', vMax: 9999999 })
+        new AutoNumeric('#LowBalanceLevel', { currencySymbol: '$', vMax: 9999999 })
+        new AutoNumeric('#ItemTargetAmount', { currencySymbol : '$', vMax: 9999999 })
 
         $("#wizFrm").submit(function (e) {
             e.preventDefault();

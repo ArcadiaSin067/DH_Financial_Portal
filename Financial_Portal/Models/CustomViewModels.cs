@@ -52,8 +52,10 @@ namespace Financial_Portal.Models
         public string BankName { get; set; }
         [Required]
         public AccountTypes AccountType { get; set; }
-        [Required, Range(0.01, 9999999.99, ErrorMessage = "Enter number between 0.01 to 9999999.99")]
+        [Required, Range(0.01, 9999999.99, ErrorMessage = "Enter a number between 0.01 to 9999999.99")]
         public double StartBal { get; set; }
+        [Required, Range(0.01, 9999999.99, ErrorMessage = "Enter a number between 0.01 to 9999999.99")]
+        public double LowBalanceLevel { get; set; }
 
 
         //bucket stuff
@@ -64,7 +66,7 @@ namespace Financial_Portal.Models
         //bucket item stuff
         [Required]
         public string ItemName { get; set; }
-        [Required, Range(0.01, 9999999.99, ErrorMessage = "Enter number between 0.01 to 9999999.99")]
+        [Required, Range(0.01, 9999999.99, ErrorMessage = "Enter a number between 0.01 to 9999999.99")]
         public double ItemTargetAmount { get; set; }
 
     }

@@ -16,8 +16,9 @@ namespace Financial_Portal.Controllers
     public class AccountController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private RoleHelper roleHelp = new RoleHelper();
         private InvitationHelper inviteHelp = new InvitationHelper();
+        private NotificationsHelper notifyHelp = new NotificationsHelper();
+        private RoleHelper roleHelp = new RoleHelper();
 
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -185,7 +186,14 @@ namespace Financial_Portal.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    if (model.HouseholdId != 0) { roleHelp.AddUserToRole(user.Id, "Member"); inviteHelp.MarkAsInvalid(model.Id); }
+                    if (model.HouseholdId != 0) 
+                    { 
+                        roleHelp.AddUserToRole(user.Id, "Member");
+                        // fire the DidTheyJoin Notification method
+                        var invitation = db.Invitations.Find(model.Id);
+                        notifyHelp.DidTheyJoinUp(invitation);
+                        inviteHelp.MarkAsInvalid(model.Id);
+                    }
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code }, protocol: Request.Url.Scheme);
