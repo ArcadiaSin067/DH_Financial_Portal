@@ -181,6 +181,7 @@
     <Compile Include="Enums\TransactionType.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\InvitationExtension.cs" />
+    <Compile Include="Extensions\TransactionExtension.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

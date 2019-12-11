@@ -7,6 +7,7 @@ using System.Data.Entity;
 using Financial_Portal.Models;
 using Financial_Portal.Helpers;
 using Microsoft.AspNet.Identity;
+using Financial_Portal.Extensions;
 
 namespace Financial_Portal.Controllers
 {
@@ -16,6 +17,7 @@ namespace Financial_Portal.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private ShowMyStuff showStuff = new ShowMyStuff();
+        private NotificationsHelper notifyMe = new NotificationsHelper();
 
         // GET: Transactions
         public ActionResult Index()
@@ -65,11 +67,14 @@ namespace Financial_Portal.Controllers
                 transaction.Created = DateTime.Now;
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
+                transaction.UpdateBalances();
+                notifyMe.AccountBalanceNotifications(transaction);
                 return RedirectToAction("Index");
             }
             var houseId = db.Users.Find(User.Identity.GetUserId()).HouseholdId ?? 0;
             ViewBag.AccountId = new SelectList(db.Accounts.Where(b => b.HouseholdId == houseId), "Id", "Name", transaction.AccountId);
             ViewBag.BucketItemId = new SelectList(db.BucketItems.Where(b => b.Bucket.HouseholdId == houseId), "Id", "Name", transaction.BucketItemId);
+            TempData["Errors"] = ErrorReader.ErrorCompiler(ModelState);
             return View(transaction);
         }
 

@@ -9,34 +9,37 @@ namespace Financial_Portal.Helpers
 {
     public class NotificationsHelper
     {
-        private static ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
         public void AccountBalanceNotifications(Transaction transaction)
         {
-            if (transaction.Account.CurrentBal <= transaction.Account.LowBalanceLevel && transaction.Account.CurrentBal >= 0.00)
+            var transactAccount = db.Accounts.Find(transaction.AccountId);
+            var transactHouse = db.Households.Find(transactAccount.HouseholdId);
+            var transactOwner = db.Users.Find(transaction.OwnerId);
+            if (transactAccount.CurrentBal <= transactAccount.LowBalanceLevel && transactAccount.CurrentBal >= 0)
             {
                 var notifyMe = new Notification
                 {
                     Created = DateTime.Now,
-                    HouseholdId = (int)transaction.Owner.HouseholdId,
+                    HouseholdId = transactHouse.Id,
                     IsRead = false,
-                    Message = $"Warning! Your balance for Account: {transaction.Account.Name} has" +
-                              $"{transaction.Account.CurrentBal} remaining.",
-                    RecipientId = transaction.OwnerId,
+                    Message = $"Warning! Your balance for Account: {transactAccount.Name} has" +
+                              $" ${transactAccount.CurrentBal} remaining.",
+                    RecipientId = transactOwner.Id,
                     Title = "Low Balance Alert!"
                 };
                 db.Notifications.Add(notifyMe);
                 db.SaveChanges();
             }
-            else if (transaction.Account.CurrentBal < 0.00)
+            else if (transactAccount.CurrentBal < 0.00)
             {
                 var notifyMe = new Notification
                 {
                     Created = DateTime.Now,
-                    HouseholdId = (int)transaction.Owner.HouseholdId,
+                    HouseholdId = transactHouse.Id,
                     IsRead = false,
-                    Message = $" Sorry {transaction.Owner.FirstName}, your balance for Account: " +
-                              $"{transaction.Account.Name} has overdrafted! Immediate attention necessary!",
-                    RecipientId = transaction.OwnerId,
+                    Message = $" Sorry {transactOwner.FirstName}, your balance for Account: " +
+                              $"{transactAccount.Name} has overdrafted! Immediate attention necessary!",
+                    RecipientId = transactOwner.Id,
                     Title = "Account Balance Overdrafted!"
                 };
                 db.Notifications.Add(notifyMe);
@@ -87,6 +90,8 @@ namespace Financial_Portal.Helpers
 
         public static List<Notification> GetUnreadNotifications()
         {
+            ApplicationDbContext db = new ApplicationDbContext();
+
             var currentUserId = HttpContext.Current.User.Identity.GetUserId();
             var notifications = db.Notifications.Where(n => n.RecipientId == currentUserId && !n.IsRead).ToList();
             return notifications;
