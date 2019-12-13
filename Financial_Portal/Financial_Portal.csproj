@@ -350,6 +350,7 @@
     <Content Include="Views\Households\Leave.cshtml" />
     <Content Include="Views\Households\Configure.cshtml" />
     <Content Include="Views\Notifications\IndexHead.cshtml" />
+    <None Include="Properties\PublishProfiles\DHFinancialPortal - Web Deploy.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
