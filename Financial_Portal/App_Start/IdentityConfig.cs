@@ -64,7 +64,7 @@ namespace Financial_Portal
             var host = WebConfigurationManager.AppSettings["host"];
             int port = Convert.ToInt32(WebConfigurationManager.AppSettings["port"]);
             var from = new MailAddress(WebConfigurationManager.AppSettings["emailfrom"],
-            "Big_Bank");
+            "Biggy_Bank");
             //Email object set up
             var email = new MailMessage(from, new MailAddress(message.Destination))
             {

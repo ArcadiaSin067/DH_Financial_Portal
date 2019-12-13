@@ -19,11 +19,11 @@ namespace Financial_Portal.Extensions
                 protocol: HttpContext.Current.Request.Url.Scheme);
             var callbackUrl2 = url.Action("Join", "Households", new { recipientEmail = invitation.RecipientEmail, code = invitation.Code },
                 protocol: HttpContext.Current.Request.Url.Scheme);
-            var from = $"Big_Bank Application<{WebConfigurationManager.AppSettings["emailfrom"]}>";
+            var from = $"Biggy_Bank Application<{WebConfigurationManager.AppSettings["emailfrom"]}>";
             var emailMessage = new MailMessage(from, invitation.RecipientEmail)
             {
-                Subject = $"You've been Invited to join a Household within the Big_Bank application.",
-                Body = $"If you are not a registered user with Big_Bank click <a href=\"{callbackUrl}\">here</a> to begin registration.<br /><br />" +
+                Subject = $"You've been Invited to join a Household within the Biggy_Bank application.",
+                Body = $"If you are not a registered user with Biggy_Bank click <a href=\"{callbackUrl}\">here</a> to begin registration.<br /><br />" +
                         $"Registered users can click <a href=\"{callbackUrl2}\">here</a> to join the household.",
                 IsBodyHtml = true
             };

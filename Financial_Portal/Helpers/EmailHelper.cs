@@ -35,7 +35,7 @@ namespace Financial_Portal.Helpers
         {
             try
             {
-                var senderEmail = $"Big_Bank Admin<{ConfiguredEmail}>";
+                var senderEmail = $"Biggy_Bank Admin<{ConfiguredEmail}>";
                 var mailMsg = new MailMessage(senderEmail, model.Email)
                 {
                     Subject = "Confirm your account",
@@ -55,7 +55,7 @@ namespace Financial_Portal.Helpers
         {
             try
             {
-                var senderEmail = $"Big_Bank Admin<{ConfiguredEmail}>";
+                var senderEmail = $"Biggy_Bank Admin<{ConfiguredEmail}>";
                 var mailMsg = new MailMessage(senderEmail, model.Email)
                 {
                     Subject = "Reset Password",
