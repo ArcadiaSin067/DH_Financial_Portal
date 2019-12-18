@@ -47,9 +47,10 @@ namespace Financial_Portal.Controllers
                     if (occupants > 1)
                     {
                         var myHouseId = user.HouseholdId;
-                        var members = db.Users.Where(u => u.HouseholdId == myHouseId && u.Id != userId);
-                        ViewBag.Successor = new SelectList(members, "Id", "FullName");
-                        return View();
+                        var members = db.Users.Where(u => u.HouseholdId == myHouseId && u.Id != userId).ToList();
+                        Session.Add("Successor", new SelectList(members, "Id", "FullName"));
+                        TempData["AppointSuccessor"] = "Pick someone...";
+                        return RedirectToAction("Index", "Home");
                     }
                     else
                     {

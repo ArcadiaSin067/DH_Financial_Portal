@@ -347,7 +347,6 @@
     <Content Include="Views\Manage\EditProfile.cshtml" />
     <Content Include="Views\Households\Join.cshtml" />
     <Content Include="Views\Home\Dashboard.cshtml" />
-    <Content Include="Views\Households\Leave.cshtml" />
     <Content Include="Views\Households\Configure.cshtml" />
     <Content Include="Views\Notifications\IndexHead.cshtml" />
     <None Include="Properties\PublishProfiles\DHFinancialPortal - Web Deploy.pubxml" />
