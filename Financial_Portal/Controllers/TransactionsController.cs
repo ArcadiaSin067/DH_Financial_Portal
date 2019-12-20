@@ -81,6 +81,7 @@ namespace Financial_Portal.Controllers
         // GET: Transactions/Edit/5
         public ActionResult Edit(int? id)
         {
+            var user = db.Users.Find(User.Identity.GetUserId());
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -90,9 +91,8 @@ namespace Financial_Portal.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.AccountId = new SelectList(db.Accounts, "Id", "Name", transactions.AccountId);
-            ViewBag.BucketItemId = new SelectList(db.BucketItems, "Id", "Name", transactions.BucketItemId);
-            ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName", transactions.OwnerId);
+            ViewBag.AccountId = new SelectList(db.Accounts.Where(a => a.HouseholdId == user.HouseholdId).ToList(), "Id", "Name", transactions.AccountId);
+            ViewBag.BucketItemId = new SelectList(db.BucketItems.Where(bi => bi.Bucket.HouseholdId == user.HouseholdId).ToList(), "Id", "Name", transactions.BucketItemId);
             return View(transactions);
         }
 

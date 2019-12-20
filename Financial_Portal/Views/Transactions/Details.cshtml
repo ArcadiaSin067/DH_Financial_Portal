@@ -4,16 +4,24 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<style>
+    dd {
+        margin-bottom:20px;
+        border-left:1px solid #ccc;
+        border-bottom:1px solid #ccc;
+        padding-left:10px;
+        margin-right:40px;
+    }
+</style>
 
-<div>
-    <h4>Transactions</h4>
-    <hr />
-    <dl class="dl-horizontal">
+<div class="module span6">
+    <div class="module-head">
+        <h3>Details for Transaction #@Model.Id</h3>
+    </div>
+    <dl class="module-body dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Account.Name)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Account.Name)
         </dd>
@@ -21,23 +29,27 @@
         <dt>
             @Html.DisplayNameFor(model => model.BucketItem.Name)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.BucketItem.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Owner.FirstName)
+            @Html.DisplayNameFor(model => model.TransactionType)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.Owner.FirstName)
+            @Html.DisplayFor(model => model.TransactionType)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Full Name")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Owner.FullName)
         </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.Amount)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Amount)
         </dd>
@@ -45,7 +57,6 @@
         <dt>
             @Html.DisplayNameFor(model => model.Created)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Created)
         </dd>
@@ -53,22 +64,12 @@
         <dt>
             @Html.DisplayNameFor(model => model.Memo)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Memo)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TransactionType)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TransactionType)
-        </dd>
-
     </dl>
+    <p style="padding-left:15px">
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

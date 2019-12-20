@@ -954,9 +954,10 @@ transition: all .2s ease-in-out;
 .widget-menu>li>a:hover .menu-icon { color:#fff;}
 
 .widget-menu>li ul li {
-	background: #eee;
+	background: #fff;
 	border-top: 1px solid #ccc
 }
+
 .widget-menu>li ul li+li {
 	border-top: 0
 }

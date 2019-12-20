@@ -1,25 +1,84 @@
-﻿@{
+﻿@using Financial_Portal.Models
+@using Microsoft.AspNet.Identity
+
+@{
     ViewBag.Title = "Home Page";
+    ApplicationDbContext db = new ApplicationDbContext();
+    var user = db.Users.Find(User.Identity.GetUserId());
 }
 
+<style>
+    .ListBtns {
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height:25px;
+    }
+</style>
+
 <div class="row-fluid">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+    <div class="span12">
+        visualization of spending versus budget for the current budget period (month)
     </div>
 </div>
+
+<div class="row-fluid">
+    <div class="span6">
+        <div class="module">
+            <div class="module-head">
+                <h3>Account Balances</h3>
+            </div>
+            <div class="module-body">
+                @{
+                    var bankAccounts = db.Accounts.Where(a => a.HouseholdId == user.HouseholdId).ToList();
+                }
+                <ul class="widget widget-menu unstyled" style="list-style-type:none; margin-left:0">
+                    @foreach (var account in bankAccounts)
+                    {
+                        var detailsId = $"/BankAccounts/Details/{account.Id}";                    
+                        <li>
+                            <a href="@detailsId" class="ListBtns">
+                                <div class="span6">
+                                    <p>Name: @account.Name</p>
+                                </div>
+                                <div class="span6">
+                                    <p>Balance: $@account.CurrentBal</p>
+                                </div>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="span6">
+        <div class="module">
+            <div class="module-head">
+                <h3>Recent Transactions</h3>
+            </div>
+            <div class="module-body">
+                @{
+                    var transactions = db.Transactions.Where(t => t.Account.HouseholdId == user.HouseholdId).ToList();
+                }
+                <ul class="widget widget-menu unstyled" style="list-style-type:none; margin-left:0">
+                    @foreach (var recent in transactions.OrderByDescending(t => t.Created).Take(5))
+                    {
+                        var detailsId = $"/Transactions/Details/{recent.Id}";
+                        <li>
+                            <a href="@detailsId" class="ListBtns">
+                                <span class="span4" style="border-right:1px solid #767676">
+                                    @recent.Account.Name
+                                </span>
+                                <span class="span4" style="border-right:1px solid #767676">
+                                    @recent.TransactionType
+                                </span>
+                                <span class="span4">
+                                    $@recent.Amount
+                                </span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
