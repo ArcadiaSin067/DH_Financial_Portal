@@ -15,10 +15,11 @@ namespace Financial_Portal.Controllers
     [RequireHttps]
     public class AccountController : Controller
     {
+        private RoleHelper roleHelp = new RoleHelper();
+        private CurrentsReset resetMonth = new CurrentsReset();
         private ApplicationDbContext db = new ApplicationDbContext();
         private InvitationHelper inviteHelp = new InvitationHelper();
         private NotificationsHelper notifyHelp = new NotificationsHelper();
-        private RoleHelper roleHelp = new RoleHelper();
 
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -83,6 +84,7 @@ namespace Financial_Portal.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    resetMonth.ResetCurrentBalances();
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");

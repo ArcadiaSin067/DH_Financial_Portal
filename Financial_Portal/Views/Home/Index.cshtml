@@ -1,5 +1,6 @@
 ﻿@using Financial_Portal.Models
 @using Microsoft.AspNet.Identity
+@model Financial_Portal.Models.Household
 
 @{
     ViewBag.Title = "Home Page";
@@ -16,7 +17,51 @@
 
 <div class="row-fluid">
     <div class="span12">
-        visualization of spending versus budget for the current budget period (month)
+        @if (user.HouseholdId != null && user.Household.IsConfigured == true)
+        {
+            <div class="module" style="padding:15px">
+                <canvas id="myChart"></canvas>
+            </div>
+        }
+        else
+        {
+            <div class="module">
+                <div class="module-head">
+                    <h3>Your Household is not Configured</h3>
+                </div>
+                <div class="module-body">
+                    @if (user.UserRole.Contains("Head_Of_House"))
+                    {
+                        <p>For full functionality of this application this House must be Configured.</p>
+                        <p>
+                            To see some metrics for your household and transactions please configure your
+                            household to get started. The configuration will setup just one Bank Account, One
+                            Expense Bucket, and One Expense Bucket Item. With these in place Transactions will
+                            be available based on those items.
+                        </p>
+                    }
+                    else if (user.UserRole.Contains("Member"))
+                    {
+                        <p>For full functionality of this application this House must be Configured.</p>
+                        <p>
+                            Your Household has not been configured yet. Configuration can only be done by the
+                            Head of your house. Once configuration is complete you can begin making Transactions. 
+                            Please reach out to your Head Of Household to make sure the configuration step is 
+                            completed soon!
+                        </p>
+                    }
+                    else
+                    {
+                        <p>For full functionality of this application you must Join or Create a Household.</p>
+                        <p>
+                            The Household in question will then have to be configured. The configuration wizard
+                            is an easy step by step process that will ready the house for Transactions to track 
+                            your expenses.
+                        </p>
+                    }
+                </div>
+            </div>
+        }
     </div>
 </div>
 
@@ -30,55 +75,108 @@
                 @{
                     var bankAccounts = db.Accounts.Where(a => a.HouseholdId == user.HouseholdId).ToList();
                 }
-                <ul class="widget widget-menu unstyled" style="list-style-type:none; margin-left:0">
+                <ol class="widget widget-menu unstyled">
                     @foreach (var account in bankAccounts)
                     {
                         var detailsId = $"/BankAccounts/Details/{account.Id}";                    
                         <li>
                             <a href="@detailsId" class="ListBtns">
-                                <div class="span6">
-                                    <p>Name: @account.Name</p>
+                                <div class="span8">
+                                    <p>@account.Name</p>
                                 </div>
-                                <div class="span6">
-                                    <p>Balance: $@account.CurrentBal</p>
+                                <div class="span4">
+                                    <p>$@account.CurrentBal</p>
                                 </div>
                             </a>
                         </li>
                     }
-                </ul>
+                </ol>
             </div>
         </div>
     </div>
     <div class="span6">
         <div class="module">
             <div class="module-head">
-                <h3>Recent Transactions</h3>
+                <h3>Recent Transactions (newest first)</h3>
             </div>
             <div class="module-body">
                 @{
                     var transactions = db.Transactions.Where(t => t.Account.HouseholdId == user.HouseholdId).ToList();
                 }
-                <ul class="widget widget-menu unstyled" style="list-style-type:none; margin-left:0">
+                <ol class="widget widget-menu unstyled">
                     @foreach (var recent in transactions.OrderByDescending(t => t.Created).Take(5))
                     {
                         var detailsId = $"/Transactions/Details/{recent.Id}";
                         <li>
                             <a href="@detailsId" class="ListBtns">
-                                <span class="span4" style="border-right:1px solid #767676">
-                                    @recent.Account.Name
-                                </span>
-                                <span class="span4" style="border-right:1px solid #767676">
-                                    @recent.TransactionType
-                                </span>
-                                <span class="span4">
+                                <p class="span8">
+                                    @recent.Account.Name - @recent.TransactionType
+                                </p>
+                                <p class="span4">
                                     $@recent.Amount
-                                </span>
+                                </p>
                             </a>
                         </li>
                     }
-                </ul>
+                </ol>
             </div>
         </div>
     </div>
 </div>
 
+@section scripts{
+    <script>
+        if (@Model.Id > 0) {
+            $(function () {
+                var url = '@Url.Action("GetStackedData", "Charts", new { houseId = Model.Id })';
+                $.post(url).then(function (response) {
+                    var ctx = $("#myChart");
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: response.Labels,
+                            datasets: [
+                                {
+                                    label: response.BarLabel1,
+                                    data: response.Data1,
+                                    backgroundColor: response.BGColor1
+                                },
+                                {
+                                    label: response.BarLabel2,
+                                    data: response.Data2,
+                                    backgroundColor: response.BGColor2
+                                },
+                                {
+                                    label: response.BarLabel3,
+                                    data: response.Data3,
+                                    backgroundColor: response.BGColor3
+                                }],
+                        },
+                        options: {
+                            tooltips: {
+                                enabled: true,
+                                mode: 'single',
+                                callbacks: {
+                                    label: function (tooltipItems, data) {
+                                        return '$' + tooltipItems.yLabel;
+                                    }
+                                }
+                            },
+                            scales: {
+                                xAxes: [{ stacked: false }],
+                                yAxes: [{
+                                    ticks: {
+                                        callback: function (value, index, values) {
+                                            return '$' + value;
+                                        }
+                                    },
+                                    stacked: false
+                                }],
+                            }
+                        }
+                    });
+                })
+            });
+        };
+    </script>
+}

@@ -81,5 +81,6 @@ namespace Financial_Portal.Models
         public DbSet<Invitation> Invitations { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<ResetBalances> ResetBalances { get; set; }
     }
 }

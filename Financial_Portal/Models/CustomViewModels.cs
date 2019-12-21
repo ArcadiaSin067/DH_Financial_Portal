@@ -1,6 +1,7 @@
 ﻿using System;
 using Financial_Portal.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace Financial_Portal.Models
 {

@@ -17,18 +17,22 @@ namespace Financial_Portal.Controllers
         private NotificationsHelper notifyHelp = new NotificationsHelper();
         private RoleHelper roleHelp = new RoleHelper();
 
+        // GET: Home/Index
         public ActionResult Index()
         {
+            var user = db.Users.Find(User.Identity.GetUserId());
             if (User.IsInRole("Head_Of_House"))
             {
-                var user = db.Users.Find(User.Identity.GetUserId());
                 var invitations = user.Household.Invitations.Where(i => i.HouseholdId == user.HouseholdId);
                 foreach (var invite in invitations)
                 {
                     notifyHelp.DidTheyJoinUp(invite);
                 }
             }
-            return View();
+            var myHouse = new Household();
+            if (user.HouseholdId == null && user.HouseholdId != 0) { myHouse.Id = 0; }
+            else { myHouse.Id = (int)user.HouseholdId; }
+            return View(myHouse);
         }
 
         // GET: Home/Dashboard

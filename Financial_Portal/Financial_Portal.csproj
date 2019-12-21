@@ -171,6 +171,7 @@
     <Compile Include="Controllers\BankAccountsController.cs" />
     <Compile Include="Controllers\BucketItemsController.cs" />
     <Compile Include="Controllers\BucketsController.cs" />
+    <Compile Include="Controllers\ChartsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HouseholdsController.cs" />
     <Compile Include="Controllers\InvitationsController.cs" />
@@ -186,6 +187,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\AvatarHelper.cs" />
+    <Compile Include="Helpers\CurrentsReset.cs" />
     <Compile Include="Helpers\EmailHelper.cs" />
     <Compile Include="Helpers\ErrorReader.cs" />
     <Compile Include="Helpers\InvitationHelper.cs" />
@@ -198,12 +200,14 @@
     <Compile Include="Models\BucketItem.cs" />
     <Compile Include="Models\Bucket.cs" />
     <Compile Include="Models\CustomViewModels.cs" />
+    <Compile Include="Models\DataBlock.cs" />
     <Compile Include="Models\EmailModel.cs" />
     <Compile Include="Models\Household.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Invitation.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Notification.cs" />
+    <Compile Include="Models\ResetBalances.cs" />
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -326,6 +330,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Charts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="font\glyphicons-halflings-regular.woff2" />
