@@ -21,7 +21,7 @@ namespace Financial_Portal.Controllers
         public ActionResult Index()
         {
             var user = db.Users.Find(User.Identity.GetUserId());
-            if (User.IsInRole("Head_Of_House"))
+            if (User.IsInRole("Head_Of_House") || User.IsInRole("Admin"))
             {
                 var invitations = user.Household.Invitations.Where(i => i.HouseholdId == user.HouseholdId);
                 foreach (var invite in invitations)

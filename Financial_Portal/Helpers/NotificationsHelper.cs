@@ -52,7 +52,7 @@ namespace Financial_Portal.Helpers
             var recipient = db.Users.FirstOrDefault(u => u.Email == invite.RecipientEmail);
             var hasJoined = recipient != null ? recipient.Email : "Nope";
             var housePpl = invite.Household.Members.ToList();
-            var HoH = housePpl.FirstOrDefault(u => u.UserRole.Contains("Head_Of_House"));
+            var HoH = housePpl.FirstOrDefault(u => u.UserRole.Contains("Head_Of_House") || u.UserRole.Contains("Admin"));
             //var HoH = db.Users.Find(headOnly);
             var expirationDate = invite.Created.AddDays(invite.TTL);
             if (DateTime.Now > expirationDate && hasJoined == "Nope" && invite.IsValid) //I want to check open invitations for head of house on login for this bit
